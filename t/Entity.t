@@ -2,5 +2,5 @@ use v6.c;
 use Test;
 use lib <lib>;
 
-use-ok 'Game';
+use-ok 'Entity';
 done-testing;
