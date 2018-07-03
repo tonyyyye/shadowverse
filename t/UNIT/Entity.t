@@ -8,5 +8,5 @@ logger.send-to("log/ERROR.log", :level(ERROR));
 
 
 
-use-ok 'Entity';
+use-ok 'Entity', 'UNIT_Entity_000          |empty Entity ';
 done-testing;
