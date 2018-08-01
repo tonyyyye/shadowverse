@@ -6,7 +6,7 @@ use Entity;
 use Game;
 
 use-ok 'Game',
-    'UNIT_Game_000            |class Game ';
+    'UNIT_Game_TC_000            |class Game ';
 ok my $game_u001 = Game.new(),
-    'UNIT_Game_001            |empty Game ';
+    'UNIT_Game_TC_001            |empty Game ';
 done-testing;

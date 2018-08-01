@@ -7,6 +7,7 @@ List out global value for all modules
 
 ## scalar
 our $IS_DEBUG = True;
+our $entity_count;
 
 ## hash
 =para
