@@ -1,15 +1,17 @@
-use v6.c;
-
-
 =para
 SV::Enum::
 List out global value for all modules
 
-## scalar
+## scalars
 our $IS_DEBUG = True;
 our $entity_count;
 
-## hash
+
+## arrays
+our @PODS;
+
+
+## hashes
 =para
 SV::Enum::CODE_OF::
 List out all default code

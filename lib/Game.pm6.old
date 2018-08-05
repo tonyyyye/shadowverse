@@ -1,5 +1,7 @@
-use Enum;
+use v6.c;
+use Log::Async;
 use Entity;
+use Enum;
 
 
 =para
@@ -7,7 +9,7 @@ Shadowverse::Game::Game_jobs::
 What a Game can do.
 
 role Game_jobs {
-
+    has $.type = %TYPE_OF{'GAME'};
     # has Player $.player1 is rw;
     # has Player $.player2 is rw;
     # has $.winner is rw;
@@ -24,7 +26,6 @@ role Game_jobs {
     method init() {
         return self;
     }
-
 }
 
 =para
@@ -40,11 +41,9 @@ Shadowverse::Game::
 A Game object is all a user needs.
 
 class Game is Entity does Game_jobs {
-    has Int $.type is default(%TYPE_OF{'GAME'});
     method BUILDALL(|) {# initial things here
         callsame;   # call the parent classes (or default) BUILDALL
-        @PODS.append: $=pod;
-        $.id = $entity_count;
+        $.entity_id = $entity_count;
         self; # return the fully built object
     }
 }

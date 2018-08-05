@@ -43,7 +43,7 @@ class Game is Entity does Game_jobs {
     has Int $.type is default(%TYPE_OF{'GAME'});
     method BUILDALL(|) {# initial things here
         callsame;   # call the parent classes (or default) BUILDALL
-        @PODS.append: $=pod;
+        @all_pod.append: $=pod;
         $.id = $entity_count;
         self; # return the fully built object
     }
