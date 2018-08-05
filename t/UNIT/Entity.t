@@ -22,10 +22,13 @@ my $entity_u002 = Entity.new();
 is $entity_u002.entity_id, 2,
     'UNIT_Entity_TC_003          |Entity ID increases ';
 
-is $entity_u002.entity(), "\$!entity_id.Str\t\t:2\n",
+is $entity_u002.entity(),
+    "\$!entity_id.Str\t\t:2\n\$!name.Str\t\t:SV\n\$!type.Str\t\t:1\n",
     'UNIT_Entity_TC_004          |use entity() to show structure ';
 
-is $entity_u002.help('help'), ' Show description of a method ',
+is $entity_u002.help('help'), ' Show description of a method ' ~
+    ':parameters: The method/instance that you want to know ' ~
+    ':return: A string form of its own .',
     'UNIT_Entity_TC_005          |use help()';
 
 

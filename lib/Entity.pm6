@@ -11,12 +11,16 @@ What a Entity can do.
 
 role Entity_jobs {
     has Int $.entity_id is rw; #TODO is required
+    has Str $.name is default('SV') is rw = 'SV';
+    has Int $.type is rw = %TYPE_OF{'ENTITY'};
 
     =para
     Shadowverse::Entity::help::
-    Show description of a method 
+    Show description of a method
+    :parameters: The method/instance that you want to know
+    :return: A string form of its own .
 
-    method help($entity){
+    method help(Str:D $entity --> Str:D){
         my %comment_of;
         for $=pod -> $pod {
             for $pod.contents -> $pod_content {
@@ -30,8 +34,10 @@ role Entity_jobs {
 
     =para
     SV::Entity::entity()::<Debug toolset>
+    :parameters: None
+    :return: A structured form of its all attributes
 
-    method entity() {
+    method entity(--> Str:D) {
         my Str $entity;
         for self.^attributes(:local) -> $attribute {
             if  ( $attribute.get_value(self)  ) {
