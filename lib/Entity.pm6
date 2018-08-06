@@ -1,6 +1,6 @@
-use v6.c;
 use Log::Async;
 use Enum;
+
 
 logger.send-to("log/INFO.log",  :level(INFO));
 logger.send-to("log/ERROR.log", :level(ERROR));
@@ -10,15 +10,16 @@ Shadowverse::Entity::Entity_jobs::
 What a Entity can do.
 
 role Entity_jobs {
-    has Int $.entity_id is rw; #TODO is required
-
     =para
     Shadowverse::Entity::help::
-    Show description of a method 
+    Show description of a method
+    :parameters: The method/instance that you want to know
+    :return: A string form of its own .
 
-    method help($entity){
+    method help(Str:D $entity --> Str:D){
+        @PODS.append: $=pod;
         my %comment_of;
-        for $=pod -> $pod {
+        for @PODS -> $pod {
             for $pod.contents -> $pod_content {
                 my $content = $pod_content.contents;
                 my @contents = split('::', $content);
@@ -29,32 +30,41 @@ role Entity_jobs {
     }
 
     =para
-    SV::Entity::entity()::<Debug toolset>
+    SV::Entity::entity::
+    :parameters: None
+    :return: A structured form of its all attributes
 
-    method entity() {
-        my Str $entity;
-        for self.^attributes(:local) -> $attribute {
-            if  ( $attribute.get_value(self)  ) {
+    method entity(--> Hash:D) {
+        my %entity_hash;
+        my $entity_key;
+        my $entity_value;
+        for self.^attributes() -> $attribute {
+            if  ( $entity_value = $attribute.get_value(self) ) {
                 # $attribute.^methods.perl.say;
                 # $attribute.^attributes.perl.say;
-                #$attribute.^mro.perl.say;
-                $entity ~= "$attribute.Str\t\t:"
-                           ~ $attribute.get_value(self)
-                           ~ "\n";
+                # $attribute.^mro.perl.say;
+
+                $entity_key = split('!',$attribute.Str)[1];
+                %entity_hash{$entity_key} = $entity_value;
             }
         }
-        return $entity;
+        return %entity_hash;
     }
 }
 
-=para
+=begin Entity
 Shadowverse::Entity::
 Everything is an Entity.
+=end Entity
 
 class Entity does Entity_jobs {
+    has Int $.id is rw; #TODO is required
+    has Str $.name is default('SV') is rw;
+    has Int $.type is default(%TYPE_OF{'ENTITY'});
     method BUILDALL(|) {# initial things here
-        callsame;   # call the parent classes (or default) BUILDALL
-        $.entity_id = $entity_count += 1;
+        @PODS.append: $=pod;
+        # callsame;   # call the parent classes (or default) BUILDALL
+        $.id = $entity_count += 1;
         self; # return the fully built object
     }
 }

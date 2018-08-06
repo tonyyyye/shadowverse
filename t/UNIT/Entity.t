@@ -1,12 +1,6 @@
-use v6.c;
 use Test;
-use Log::Async;
 use lib <lib>;
 use Entity;
-
-logger.send-to("log/INFO.log",  :level(INFO));
-logger.send-to("log/ERROR.log", :level(ERROR));
-
 
 
 use-ok 'Entity',
@@ -15,17 +9,24 @@ use-ok 'Entity',
 ok my $entity_u001 = Entity.new(),
     'UNIT_Entity_TC_001          |empty Entity ';
 
-is $entity_u001.entity_id, 1,
+is $entity_u001.id, 1,
     'UNIT_Entity_TC_002          |Entity ID ';
 
 my $entity_u002 = Entity.new();
-is $entity_u002.entity_id, 2,
+is $entity_u002.id, 2,
     'UNIT_Entity_TC_003          |Entity ID increases ';
 
-is $entity_u002.entity(), "\$!entity_id.Str\t\t:2\n",
+my %expected_entity_u002 = (
+    'id'        => 2,
+    'name'      => 'SV',
+    'type'      => 1,
+);
+is $entity_u002.entity(),    %expected_entity_u002,
     'UNIT_Entity_TC_004          |use entity() to show structure ';
 
-is $entity_u002.help('help'), ' Show description of a method ',
+is $entity_u002.help('help'), ' Show description of a method ' ~
+    ':parameters: The method/instance that you want to know ' ~
+    ':return: A string form of its own .',
     'UNIT_Entity_TC_005          |use help()';
 
 
