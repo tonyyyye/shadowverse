@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 use Log::Async;
 use Enum;
 
@@ -68,3 +69,71 @@ class Entity does Entity_jobs {
         self; # return the fully built object
     }
 }
+=======
+use v6.c;
+use Log::Async;
+use Enum;
+
+logger.send-to("log/INFO.log",  :level(INFO));
+logger.send-to("log/ERROR.log", :level(ERROR));
+
+=para
+Shadowverse::Entity::Entity_jobs::
+What a Entity can do.
+
+role Entity_jobs {
+    has Int $.entity_id is rw; #TODO is required
+    has Str $.name is default('SV') is rw = 'SV';
+    has Int $.type is rw = %TYPE_OF{'ENTITY'};
+
+    =para
+    Shadowverse::Entity::help::
+    Show description of a method
+    :parameters: The method/instance that you want to know
+    :return: A string form of its own .
+
+    method help(Str:D $entity --> Str:D){
+        my %comment_of;
+        for $=pod -> $pod {
+            for $pod.contents -> $pod_content {
+                my $content = $pod_content.contents;
+                my @contents = split('::', $content);
+                %comment_of{ @contents[*-2]} = @contents[*-1];
+            }
+        }
+        return %comment_of{$entity};
+    }
+
+    =para
+    SV::Entity::entity()::<Debug toolset>
+    :parameters: None
+    :return: A structured form of its all attributes
+
+    method entity(--> Str:D) {
+        my Str $entity;
+        for self.^attributes(:local) -> $attribute {
+            if  ( $attribute.get_value(self)  ) {
+                # $attribute.^methods.perl.say;
+                # $attribute.^attributes.perl.say;
+                #$attribute.^mro.perl.say;
+                $entity ~= "$attribute.Str\t\t:"
+                           ~ $attribute.get_value(self)
+                           ~ "\n";
+            }
+        }
+        return $entity;
+    }
+}
+
+=para
+Shadowverse::Entity::
+Everything is an Entity.
+
+class Entity does Entity_jobs {
+    method BUILDALL(|) {# initial things here
+        callsame;   # call the parent classes (or default) BUILDALL
+        $.entity_id = $entity_count += 1;
+        self; # return the fully built object
+    }
+}
+>>>>>>> c2f61002a889737beb5197750483e4d47a2b0d31
