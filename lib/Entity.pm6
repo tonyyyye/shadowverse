@@ -30,7 +30,7 @@ role Entity_jobs {
     }
 
     =para
-    SV::Entity::entity()::<Debug toolset>
+    SV::Entity::entity::
     :parameters: None
     :return: A structured form of its all attributes
 

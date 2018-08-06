@@ -30,8 +30,6 @@ is $entity_u002.help('help'), ' Show description of a method ' ~
     'UNIT_Entity_TC_005          |use help()';
 
 
-$entity_u002.help('Entity').say;
-
 
 
 
