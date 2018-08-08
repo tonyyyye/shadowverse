@@ -54,7 +54,7 @@ role Entity_jobs {
 
 =begin Entity
 Shadowverse::Entity::
-Everything is an Entity.
+Everything is an Entity .
 =end Entity
 
 class Entity does Entity_jobs {
@@ -63,8 +63,8 @@ class Entity does Entity_jobs {
     has Int $.type is default(%TYPE_OF{'ENTITY'});
     method BUILDALL(|) {# initial things here
         @PODS.append: $=pod;
-        # callsame;   # call the parent classes (or default) BUILDALL
-        $.id = $entity_count += 1;
+        callsame;   # call the parent classes (or default) BUILDALL
+        $.id = $ENTITY_COUNT += 1;
         self; # return the fully built object
     }
 }

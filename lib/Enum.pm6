@@ -4,7 +4,7 @@ List out global value for all modules
 
 ## scalars
 our $IS_DEBUG = True;
-our $entity_count;
+our $ENTITY_COUNT;
 
 
 ## arrays

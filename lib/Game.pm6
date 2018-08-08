@@ -44,7 +44,7 @@ class Game is Entity does Game_jobs {
     method BUILDALL(|) {# initial things here
         callsame;   # call the parent classes (or default) BUILDALL
         @PODS.append: $=pod;
-        $.id = $entity_count;
+        $.id = $ENTITY_COUNT;
         self; # return the fully built object
     }
 }
