@@ -5,10 +5,12 @@ List out global value for all modules
 ## scalars
 our $IS_DEBUG = True;
 our $ENTITY_COUNT;
+our $ALL_CARDS_FILE = "./doc/cards.json";
 
 
 ## arrays
 our @PODS;
+our @ALL_CARDS_DATA;
 
 
 ## hashes

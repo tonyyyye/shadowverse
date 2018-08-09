@@ -1,19 +1,25 @@
+use JSON::Fast;
+use Log::Async;
 use Enum;
 use Entity;
 
 
+
+logger.send-to("log/INFO.log",  :level(INFO));
+logger.send-to("log/ERROR.log", :level(ERROR));
+
 =para
-Shadowverse::Game::Game_jobs::
+Shadowverse::Entity::Game::Game_jobs::
 What a Game can do.
 
 role Game_jobs {
-
+    has Int $.type is default(%TYPE_OF{'GAME'});
     # has Player $.player1 is rw;
     # has Player $.player2 is rw;
     # has $.winner is rw;
 
     =para
-    SV::Entity::Game::Game_jobs::init()::
+    Shadowverse::Entity::Game::Game_jobs::init()::
     Initialize a game this includes several steps:
     1 Load Player, Hero, Deck
     2 Choose which to play first
@@ -25,10 +31,35 @@ role Game_jobs {
         return self;
     }
 
+    =para
+    Shadowverse::Entity::Game::load_deck::
+    Load all cards for cases.
+    TODO built it in to speed up
+
+    method load_all_cards {
+    my $contents = slurp $ALL_CARDS_FILE;
+        @ALL_CARDS_DATA = from-json($contents){'data'}{'cards'}.clone;
+        return True;
+    }
+
+    =para
+    Shadowverse::Entity::Game::find_card::
+    find a card by its card_id
+
+    method find_card($card_id) {
+        for @ALL_CARDS_DATA -> $card_data {
+            if $card_data{"card_id"} eq $card_id {
+                info("The card with id: $card_id is found");
+                return True;
+            }
+        }
+        error("The card with id:  $card_id does not exist ");
+        return False;
+    }
 }
 
 =para
-Shadowverse::Game::Cheat_jobs::
+Shadowverse::Entity::Game::Cheat_jobs::
 give privileges to do jobs
 
 role Cheat_jobs {
@@ -36,15 +67,15 @@ role Cheat_jobs {
 }
 
 =para
-Shadowverse::Game::
+Shadowverse::Entity::Game::
 A Game object is all a user needs.
 
 class Game is Entity does Game_jobs {
-    has Int $.type is default(%TYPE_OF{'GAME'});
+
     method BUILDALL(|) {# initial things here
         callsame;   # call the parent classes (or default) BUILDALL
         @PODS.append: $=pod;
-        $.id = $ENTITY_COUNT;
+        $.id = $ENTITY_COUNT = 1;
         self; # return the fully built object
     }
 }
