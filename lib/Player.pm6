@@ -2,8 +2,8 @@ use Log::Async;
 use Enum;
 use Entity;
 
-logger.send-to("log/INFO.log",  :level(INFO));
-logger.send-to("log/ERROR.log", :level(ERROR));
+logger.send-to('log/INFO.log',  :level(INFO));
+logger.send-to('log/ERROR.log', :level(ERROR));
 
 =para
 Shadowverse::Entity::Player::Player_jobs::

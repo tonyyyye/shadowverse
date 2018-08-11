@@ -14,7 +14,7 @@ role Entity_jobs {
     Shadowverse::Entity::help::
     Show description of a method
     :parameters: The method/instance that you want to know
-    :return: A string form of its own .
+    :return: A string form of the description .
 
     method help(Str:D $entity --> Str:D){
         @PODS.append: $=pod;
@@ -30,7 +30,7 @@ role Entity_jobs {
     }
 
     =para
-    SV::Entity::entity::
+    Shadowverse::Entity::entity::
     :parameters: None
     :return: A structured form of its all attributes
 
@@ -40,10 +40,6 @@ role Entity_jobs {
         my $entity_value;
         for self.^attributes() -> $attribute {
             if  ( $entity_value = $attribute.get_value(self) ) {
-                # $attribute.^methods.perl.say;
-                # $attribute.^attributes.perl.say;
-                # $attribute.^mro.perl.say;
-
                 $entity_key = split('!',$attribute.Str)[1];
                 %entity_hash{$entity_key} = $entity_value;
             }
@@ -52,19 +48,21 @@ role Entity_jobs {
     }
 }
 
-=begin Entity
+=para
 Shadowverse::Entity::
 Everything is an Entity .
-=end Entity
 
 class Entity does Entity_jobs {
-    has Int $.id is rw; #TODO is required
-    has Str $.name is default('SV') is rw;
+    has Int $.id is rw;
+    has Str $.name is default(%CODE_OF{'DEFAULT_STR'}) is rw;
     has Int $.type is default(%TYPE_OF{'ENTITY'});
-    method BUILDALL(|) {# initial things here
+    # initial things here
+    method BUILDALL(|) {
         @PODS.append: $=pod;
-        callsame;   # call the parent classes (or default) BUILDALL
+        # call the parent classes (or default) BUILDALL
+        callsame;
         $.id = $ENTITY_COUNT += 1;
-        self; # return the fully built object
+        # return the fully built object
+        self;
     }
 }

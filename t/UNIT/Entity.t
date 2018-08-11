@@ -19,7 +19,7 @@ is $entity_u002.id, 2,
 
 my %expected_entity_u002 = (
     id        => 2,
-    name      => 'SV',
+    name      => 'SHADOWVERSE',
     type      => 1,
    );
 is $entity_u002.entity(),    %expected_entity_u002,
@@ -27,7 +27,7 @@ is $entity_u002.entity(),    %expected_entity_u002,
 
 is $entity_u002.help('help'), ' Show description of a method ' ~
     ':parameters: The method/instance that you want to know ' ~
-    ':return: A string form of its own .',
+    ':return: A string form of the description .',
     'UNIT_Entity_TC_005          |use help()';
 
 is $entity_u002.help('Entity'), ' Everything is an Entity .',

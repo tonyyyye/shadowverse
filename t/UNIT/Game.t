@@ -14,7 +14,7 @@ is $game_u001.id(), 1,
 
 my $game_u002 = Game.new();
 is $game_u002.id(), 1,
-    'UNIT_Game_TC_003            |Entity ID restart';
+    'UNIT_Game_TC_003            |Entity ID restart ';
 
 ok $game_u002.load_all_cards(),
     'UNIT_Game_TC_004            |load all cards ';
