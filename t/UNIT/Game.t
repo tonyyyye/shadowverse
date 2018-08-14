@@ -16,11 +16,8 @@ my $game_u002 = Game.new();
 is $game_u002.id(), 1,
     'UNIT_Game_TC_003            |Entity ID restart ';
 
-ok $game_u002.load_all_cards(),
-    'UNIT_Game_TC_004            |load all cards ';
-
 is $game_u002.find_card(900111020), True,
-    'UNIT_Game_TC_005            |can find a existing card ';
+    'UNIT_Game_TC_004            |can find a existing card ';
 is $game_u002.find_card(13579), False,
     'UNIT_Game_TC_005            |can alert a non-existing card ';
 

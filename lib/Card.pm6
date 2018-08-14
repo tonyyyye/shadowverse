@@ -6,20 +6,19 @@ logger.send-to('log/INFO.log',  :level(INFO));
 logger.send-to('log/ERROR.log', :level(ERROR));
 
 =para
-Shadowverse::Entity::Player::Player_jobs::
-What a Player can do.
+Shadowverse::Entity::Card::Card_jobs::
+What a Card can do.
 
-role Player_jobs {
+role Card_jobs {
 
 }
 
 
 =para
-Shadowverse::Entity::Player::
-A robot or a human controls Player
+Shadowverse::Entity::Card::
+Card consists deck for Player
 
-class Player is Entity does Player_jobs {
-
+class Card is Entity does Card_jobs {
     method BUILDALL(|) {
         @PODS.append: $=pod;
         callsame;

@@ -1,3 +1,5 @@
+use JSON::Fast;
+
 =para
 Shadowverse::Enum::
 List out global value for all modules
@@ -9,12 +11,18 @@ Shadowverse::Enum::ENTITY_COUNT::
 List out Entity sequence as it is created .
 
 our $ENTITY_COUNT;
-our $ALL_CARDS_FILE = "./doc/cards.json";
-
+our $ALL_CARDS_FILE = "./doc/cards.json.short";
 
 ## arrays
 our @PODS;
-our @ALL_CARDS_DATA;
+
+=para
+Shadowverse::Enum::ALL_CARDS_DATA::
+List out all cards data from json file
+TODO built it in to speed up
+
+our @ALL_CARDS_DATA =
+    from-json(slurp $ALL_CARDS_FILE){'data'}{'cards'}.clone;
 
 
 ## hashes

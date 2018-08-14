@@ -1,4 +1,3 @@
-use JSON::Fast;
 use Log::Async;
 use Enum;
 use Entity;
@@ -33,12 +32,9 @@ role Game_jobs {
 
     =para
     Shadowverse::Entity::Game::load_deck::
-    Load all cards for cases.
-    TODO built it in to speed up
+    load decks for Player
 
-    method load_all_cards {
-    my $contents = slurp $ALL_CARDS_FILE;
-        @ALL_CARDS_DATA = from-json($contents){'data'}{'cards'}.clone;
+    method load_deck {
         return True;
     }
 
