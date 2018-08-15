@@ -3,6 +3,7 @@ use lib <lib>;
 use Entity;
 use Enum;
 use Player;
+use Card;
 
 
 use-ok 'Player',
@@ -18,12 +19,11 @@ my $palyer_u002 = Player.new();
 is $palyer_u002.id, 2,
     'UNIT_Player_TC_003          |Entity ID increases ';
 
-
-my @prepared_deck = [ 'WISP', 'WISP', 'WISP',  ];
+my Card $card_u003;
+my @prepared_deck = [ $card_u003, $card_u003 ];
 ok my $player_u003 = Player.new(
         deck => @prepared_deck,
-        hand => @prepared_deck.pick: 2,
-        name => 'yey',
+        hand => @prepared_deck.pick: 1,
         #hero => $hero_002,
       ),
     'UNIT_Player_TC_004          |create Player with parameters ';

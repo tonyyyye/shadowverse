@@ -10,7 +10,14 @@ Shadowverse::Entity::Player::Player_jobs::
 What a Player can do.
 
 role Player_jobs {
+    =para
+    Shadowverse::Entity::Player::load_deck::
+    load decks for Player
 
+    method load_deck {
+        # TODO add more details
+        return True;
+    }
 }
 
 
