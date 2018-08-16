@@ -18,15 +18,21 @@ is $entity_u002.id, 2,
     'UNIT_Entity_TC_003          |Entity ID increases ';
 
 my %expected_entity_u002 = (
-    id        => 2,
-    name      => 'SHADOWVERSE',
-    type      => 1,
+    id           => 2,
+    name         => 'SHADOWVERSE',
+    type         => 1,
+    'id()'       => 'IS_A_METHOD',
+    'name()'     => 'IS_A_METHOD',
+    'type()'     => 'IS_A_METHOD',
+    'entity()'   => 'IS_A_METHOD',
+    'help()'     => 'IS_A_METHOD',
+    'BUILDALL()' => 'IS_A_METHOD',
    );
 is $entity_u002.entity(),    %expected_entity_u002,
     'UNIT_Entity_TC_004          |use entity() to show structure ';
 
 is $entity_u002.help('help'), ' Show description of a method ' ~
-    ':parameters: The method/instance that you want to know ' ~
+    ':parameters: The method/instance name that you want to know ' ~
     ':return: A string form of the description .',
     'UNIT_Entity_TC_005          |use help()';
 
@@ -38,14 +44,18 @@ my $entity_u003 = Entity.new(
         type => %TYPE_OF{'HERO'},
    );
 my %expected_entity_u003 = (
-    'id'        => 3,
-    'name'      => 'hero_test',
-    'type'      => 5,
+    id           => 3,
+    name         => 'hero_test',
+    type         => 5,
+    'id()'       => 'IS_A_METHOD',
+    'name()'     => 'IS_A_METHOD',
+    'type()'     => 'IS_A_METHOD',
+    'entity()'   => 'IS_A_METHOD',
+    'help()'     => 'IS_A_METHOD',
+    'BUILDALL()' => 'IS_A_METHOD',
    );
 is $entity_u003.entity, %expected_entity_u003,
     'UNIT_Entity_TC_007          |create Entity with arguments ';
-
-
 
 
 

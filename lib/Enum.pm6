@@ -11,6 +11,9 @@ Shadowverse::Enum::ENTITY_COUNT::
 List out Entity sequence as it is created .
 
 our $ENTITY_COUNT;
+
+# reserve 100001 ~ 101000 as debug code
+our $ENTITY_METHOD = 100001;
 our $ALL_CARDS_FILE = "./doc/cards.json.short";
 
 ## arrays

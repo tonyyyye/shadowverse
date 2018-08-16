@@ -13,7 +13,7 @@ role Entity_jobs {
     =para
     Shadowverse::Entity::help::
     Show description of a method
-    :parameters: The method/instance that you want to know
+    :parameters: The method/instance name that you want to know
     :return: A string form of the description .
 
     method help(Str:D $entity --> Str:D){
@@ -23,7 +23,7 @@ role Entity_jobs {
             for $pod.contents -> $pod_content {
                 my $content = $pod_content.contents;
                 my @contents = split('::', $content);
-                %comment_of{ @contents[*-2]} = @contents[*-1];
+                %comment_of{@contents[*-2]} = @contents[*-1];
             }
         }
         return %comment_of{$entity};
@@ -32,17 +32,20 @@ role Entity_jobs {
     =para
     Shadowverse::Entity::entity::
     :parameters: None
-    :return: A structured form of its all attributes
+    :return: A structured form of its all attributes and methods
 
     method entity(--> Hash:D) {
         my %entity_hash;
-        my $entity_key;
-        my $entity_value;
+        my ($entity_key,$entity_value);
         for self.^attributes() -> $attribute {
             if  ( $entity_value = $attribute.get_value(self) ) {
                 $entity_key = split('!',$attribute.Str)[1];
                 %entity_hash{$entity_key} = $entity_value;
             }
+        }
+        for self.^methods() -> $method {
+            $entity_key = $method.name() ~ '()';
+            %entity_hash{$entity_key} = 'IS_A_METHOD';
         }
         return %entity_hash;
     }
