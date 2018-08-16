@@ -1,19 +1,36 @@
+use JSON::Fast;
+
 =para
-SV::Enum::
+Shadowverse::Enum::
 List out global value for all modules
 
 ## scalars
 our $IS_DEBUG = True;
-our $entity_count;
+=para
+Shadowverse::Enum::ENTITY_COUNT::
+List out Entity sequence as it is created .
 
+our $ENTITY_COUNT;
+
+# reserve 100001 ~ 101000 as debug code
+our $ENTITY_METHOD = 100001;
+our $ALL_CARDS_FILE = "./doc/cards.json.short";
 
 ## arrays
 our @PODS;
 
+=para
+Shadowverse::Enum::ALL_CARDS_DATA::
+List out all cards data from json file
+TODO built it in to speed up
+
+our @ALL_CARDS_DATA =
+    from-json(slurp $ALL_CARDS_FILE){'data'}{'cards'}.clone;
+
 
 ## hashes
 =para
-SV::Enum::CODE_OF::
+Shadowverse::Enum::CODE_OF::
 List out all default code
 
 our %CODE_OF =
@@ -24,9 +41,8 @@ our %CODE_OF =
     DEFAULT_HASH       =>  ('SHADOWVERSE' => 0),
 ;
 
-
 =para
-SV::Enum::TYPE_OF::
+Shadowverse::Enum::TYPE_OF::
 List out all internal code
 
 our %TYPE_OF =
@@ -52,7 +68,7 @@ our %TYPE_OF =
 
 
 =para
-SV::Enum::CLASS_OF::
+Shadowverse::Enum::CLASS_OF::
 List out all class code
 
 our %CLASS_OF =

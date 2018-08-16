@@ -13,8 +13,8 @@ role Entity_jobs {
     =para
     Shadowverse::Entity::help::
     Show description of a method
-    :parameters: The method/instance that you want to know
-    :return: A string form of its own .
+    :parameters: The method/instance name that you want to know
+    :return: A string form of the description .
 
     method help(Str:D $entity --> Str:D){
         @PODS.append: $=pod;
@@ -23,48 +23,49 @@ role Entity_jobs {
             for $pod.contents -> $pod_content {
                 my $content = $pod_content.contents;
                 my @contents = split('::', $content);
-                %comment_of{ @contents[*-2]} = @contents[*-1];
+                %comment_of{@contents[*-2]} = @contents[*-1];
             }
         }
         return %comment_of{$entity};
     }
 
     =para
-    SV::Entity::entity::
+    Shadowverse::Entity::entity::
     :parameters: None
-    :return: A structured form of its all attributes
+    :return: A structured form of its all attributes and methods
 
     method entity(--> Hash:D) {
         my %entity_hash;
-        my $entity_key;
-        my $entity_value;
+        my ($entity_key,$entity_value);
         for self.^attributes() -> $attribute {
             if  ( $entity_value = $attribute.get_value(self) ) {
-                # $attribute.^methods.perl.say;
-                # $attribute.^attributes.perl.say;
-                # $attribute.^mro.perl.say;
-
                 $entity_key = split('!',$attribute.Str)[1];
                 %entity_hash{$entity_key} = $entity_value;
             }
+        }
+        for self.^methods() -> $method {
+            $entity_key = $method.name() ~ '()';
+            %entity_hash{$entity_key} = 'IS_A_METHOD';
         }
         return %entity_hash;
     }
 }
 
-=begin Entity
+=para
 Shadowverse::Entity::
-Everything is an Entity.
-=end Entity
+Everything is an Entity .
 
 class Entity does Entity_jobs {
-    has Int $.id is rw; #TODO is required
-    has Str $.name is default('SV') is rw;
+    has Int $.id is rw;
+    has Str $.name is default(%CODE_OF{'DEFAULT_STR'}) is rw;
     has Int $.type is default(%TYPE_OF{'ENTITY'});
-    method BUILDALL(|) {# initial things here
+    # initial things here
+    method BUILDALL(|) {
         @PODS.append: $=pod;
-        # callsame;   # call the parent classes (or default) BUILDALL
-        $.id = $entity_count += 1;
-        self; # return the fully built object
+        # call the parent classes (or default) BUILDALL
+        callsame;
+        $.id = $ENTITY_COUNT += 1;
+        # return the fully built object
+        self;
     }
 }

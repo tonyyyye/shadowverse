@@ -6,3 +6,5 @@ perl6:
 install:
   - rakudobrew build-zef
   - zef install Log::Async
+  - zef install JSON::Fast
+  - zef install Terminal::ANSIColor
