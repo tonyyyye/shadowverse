@@ -18,7 +18,7 @@ role Game_jobs {
     has $.winner is rw;
 
     =para
-    Shadowverse::Entity::Games::init:
+    Shadowverse::Entity::Games::init():
     Initialize a game this includes several steps:
     1 Load Player, Hero, Deck
     2 Choose which to play first
@@ -31,18 +31,10 @@ role Game_jobs {
     }
 
     =para
-    Shadowverse::Entity::Game::load_deck::
-    load decks for Player
-
-    method load_deck {
-        return True;
-    }
-
-    =para
-    Shadowverse::Entity::Game::find_card::
+    Shadowverse::Entity::Game::check_card()::
     find a card by its card_id
 
-    method find_card($card_id) {
+    method check_card($card_id) {
         for @ALL_CARDS_DATA -> $card_data {
             if $card_data{'card_id'} eq $card_id {
                 # info("The card with id: $card_id is found");
@@ -54,11 +46,19 @@ role Game_jobs {
     }
 
     =para
-    Shadowverse::Entity::Game::players::
+    Shadowverse::Entity::Game::players()::
     return all Player
 
     method players() {
-        return True;
+        return ($!player1, $!player2);
+    }
+
+    =para
+    Shadowverse::Entity::Game::players()::
+    return all Player in revert sequence
+
+    method switch_players() {
+        return ($!player2, $!player1);
     }
 }
 
@@ -74,7 +74,7 @@ role Cheat_jobs {
 Shadowverse::Entity::Game::
 A Game object is all a user needs.
 
-class Game is Entity does Game_jobs {
+class Game is Entity does Game_jobs does Cheat_jobs {
     method BUILDALL(|) {
         callsame;
         @PODS.append: $=pod;

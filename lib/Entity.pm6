@@ -11,7 +11,7 @@ What a Entity can do.
 
 role Entity_jobs {
     =para
-    Shadowverse::Entity::help::
+    Shadowverse::Entity::help()::
     Show description of a method
     :parameters: The method/instance name that you want to know
     :return: A string form of the description .
@@ -30,7 +30,7 @@ role Entity_jobs {
     }
 
     =para
-    Shadowverse::Entity::entity::
+    Shadowverse::Entity::entity()::
     :parameters: None
     :return: A structured form of its all attributes and methods
 

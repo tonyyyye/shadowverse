@@ -18,14 +18,14 @@ sub case($text) {
 }
 
 
-ok my $game_10000000 = Game.new(),
+ok my $game_10000001 = Game.new(),
     case('an empty Game ');
 
 $player1 = Player.new();
 $player2 = Player.new();
-ok my $game_u002 = Game.new(
-       Player1 => $player1,
-       Player2 => $player2,
+ok my $game_10000002 = Game.new(
+          Player1 => $player1,
+          Player2 => $player2,
       ),
    case('Game with empty Player ');
 
