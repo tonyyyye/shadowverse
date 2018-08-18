@@ -2,6 +2,7 @@ use Log::Async;
 use Enum;
 use Entity;
 use Player;
+use Card;
 
 
 logger.send-to('log/INFO.log',  :level(INFO));
@@ -15,7 +16,8 @@ role Game_jobs {
     has Int $.type is default(%TYPE_OF{'GAME'});
     has Player $.player1 is rw;
     has Player $.player2 is rw;
-    has $.winner is rw;
+    has Player @.players is rw;
+    has Card @.set_aside is rw;
 
     =para
     Shadowverse::Entity::Games::init():

@@ -20,9 +20,9 @@ is $palyer_u002.id, 2,
     'UNIT_Player_TC_004          |Entity ID increases ';
 
 my Card $card_u003;
-my @prepared_deck = [ $card_u003, $card_u003 ];
+my @deck_u003 = [ $card_u003, $card_u003 ];
 ok my $player_u003 = Player.new(
-          deck => @prepared_deck,
+          deck => @deck_u003,
           #hero => $hero_002,
       ),
     'UNIT_Player_TC_005          |create Player with parameters ';
