@@ -33,6 +33,22 @@ role Game_jobs {
     }
 
     =para
+    Shadowverse::Entity::Game::load_all_cards()::
+    load all Card by its card_id
+
+    method load_all_cards {
+        for @ALL_CARDS_DATA -> $hash_card {
+            my $card_name = $hash_card{'card_name'};
+            # TODO push Card instead of Hash
+            %DATA_OF_CARD{$card_name} = $hash_card;
+        }
+        return True;
+        # @ALL_CARDS_DATA.say;
+        # return True;
+    }
+
+
+    =para
     Shadowverse::Entity::Game::check_card()::
     find a card by its card_id
 

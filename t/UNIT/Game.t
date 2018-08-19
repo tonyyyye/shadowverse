@@ -16,6 +16,9 @@ my $game_u002 = Game.new();
 is $game_u002.id(), 1,
     'UNIT_Game_TC_004            |Entity ID restart ';
 
+ok $game_u002.load_all_cards(),
+    'UNIT_Game_TC_005            |load all cards by Game ';
+
 # TODO modify these cases after being fully implemented Card
 # is $game_u002.check_card(900111020), True,
 #     'UNIT_Game_TC_004            |can find a existing card ';

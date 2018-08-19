@@ -13,8 +13,8 @@ List out Entity sequence as it is created .
 our $ENTITY_COUNT;
 
 # reserve 100001 ~ 101000 as debug code
-our $ENTITY_METHOD = 100001;
-our $ALL_CARDS_FILE = "./doc/cards.json.short";
+our $ENTITY_METHOD     = 100001;
+our $ALL_CARDS_FILE    = "./doc/cards.json.short";
 
 ## arrays
 our @PODS;
@@ -75,4 +75,46 @@ our %CLASS_OF =
     UNDEFINED          => 0,
     CHAOYUEZHE         => 1,
     LONGZU             => 2,
+;
+
+=para
+Shadowverse::Enum::DATA_OF::
+store all data of official cards in Hash
+
+our %DATA_OF_TEMPLATE_CARD =
+    clan               => %CODE_OF<DEFAULT_STR>,
+    skill              => %CODE_OF<DEFAULT_STR>,
+    cost               => %CODE_OF<DEFAULT_STR>,
+    life               => %CODE_OF<DEFAULT_STR>,
+    base_card_id       => %CODE_OF<DEFAULT_STR>,
+    org_skill_disc     => %CODE_OF<DEFAULT_STR>,
+    atk                => %CODE_OF<DEFAULT_STR>,
+    get_red_ether      => %CODE_OF<DEFAULT_STR>,
+    normal_card_id     => %CODE_OF<DEFAULT_STR>,
+    copyright          => %CODE_OF<DEFAULT_STR>,
+    tokens             => %CODE_OF<DEFAULT_STR>,
+    format_type        => %CODE_OF<DEFAULT_STR>,
+    evo_description    => %CODE_OF<DEFAULT_STR>,
+    card_set_id        => %CODE_OF<DEFAULT_STR>,
+    card_name          => %CODE_OF<DEFAULT_STR>,
+    char_type          => %CODE_OF<DEFAULT_STR>,
+    skill_option       => %CODE_OF<DEFAULT_STR>,
+    rarity             => %CODE_OF<DEFAULT_STR>,
+    foil_card_id       => %CODE_OF<DEFAULT_STR>,
+    evo_skill_disc     => %CODE_OF<DEFAULT_STR>,
+    cv                 => %CODE_OF<DEFAULT_STR>,
+    restricted_count   => %CODE_OF<DEFAULT_STR>,
+    card_id            => %CODE_OF<DEFAULT_STR>,
+    tribe_name         => %CODE_OF<DEFAULT_STR>,
+    org_evo_skill_disc => %CODE_OF<DEFAULT_STR>,
+    evo_life           => %CODE_OF<DEFAULT_STR>,
+    use_red_ether      => %CODE_OF<DEFAULT_STR>,
+    is_foil            => %CODE_OF<DEFAULT_STR>,
+    skill_disc         => %CODE_OF<DEFAULT_STR>,
+    evo_atk            => %CODE_OF<DEFAULT_STR>,
+    description        => %CODE_OF<DEFAULT_STR>,
+;
+
+our %DATA_OF_CARD =
+    template_card      => %DATA_OF_TEMPLATE_CARD,
 ;
