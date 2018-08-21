@@ -11,8 +11,11 @@ logger.send-to('log/INFO.log',  :level(INFO));
 logger.send-to('log/ERROR.log', :level(ERROR));
 
 my $game_index = 10000000;
-my ($player1,$player2);
-my (@deck1 ,@deck2);
+my ($game_player1, $game_player2);
+my (
+    @deck_by_name_of_player1, @deck_by_name_of_player2,
+    @deck1, @deck2,
+);
 
 sub case($text) {
     $game_index++;
@@ -24,12 +27,12 @@ sub case($text) {
 ok my $game_10000001 = Game.new(),
     case('an empty Game ');
 
-$player1 = Player.new();
-$player2 = Player.new();
+$game_player1 = Player.new();
+$game_player2 = Player.new();
 
 ok my $game_10000002 = Game.new(
-          Player1 => $player1,
-          Player2 => $player2,
+          player1 => $game_player1,
+          player2 => $game_player2,
       ),
    case('Game with empty Player ');
 
@@ -38,14 +41,8 @@ for ^40 {
     @deck1[$_]= Card.new;
     @deck2[$_]= Card.new;
 };
-$player1 = Player.new(deck => @deck1);
-$player2 = Player.new(deck => @deck2);
-
-ok my $game_10000003 = Game.new(
-          Player1 => $player1,
-          Player2 => $player2,
-      ),
-   case('Game with Player and Card ');
+$game_player1 = Player.new(deck => @deck1);
+$game_player2 = Player.new(deck => @deck2);
 
 
 
