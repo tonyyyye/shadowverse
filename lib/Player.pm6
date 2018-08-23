@@ -16,9 +16,10 @@ role Player_jobs {
     Shadowverse::Entity::Player::load_deck()::
     load deck for Player
 
-    method load_deck(Array:D @deck_by_name) {
-        for ^@deck_by_name {
-            push @!deck, %DATA_OF_CARD{$_};
+    method load_deck(@deck_by_name) {
+        for @deck_by_name {
+            %DATA_OF_CARD{$_}.WHAT.say;
+            @!deck.push(%DATA_OF_CARD{$_});
         }
         return self;
     }

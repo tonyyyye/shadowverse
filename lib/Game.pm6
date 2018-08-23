@@ -32,7 +32,7 @@ role Game_jobs {
         ($!first_player, $.second_player) = self.roll_first;
         $!first_player.opponent_player = $!second_player;
         $!second_player.opponent_player = $!first_player;
-        self.load_all_cards();
+        # self.load_all_cards(); # use in real Game
         return self;
     }
 

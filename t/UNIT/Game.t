@@ -10,6 +10,8 @@ my (
     @deck_by_name_of_player1, @deck_by_name_of_player2,
     @deck_of_player1, @deck_of_player2,
 );
+sub in { return  (grep @^a, @^b) };
+
 
 use-ok 'Game',
     '  UNIT_Game_TC_001            |class Game ';
@@ -51,14 +53,15 @@ ok my $game_u005 = Game.new(
           player1 => $game_player1,
           player2 => $game_player2,
       ).init(),
-    '  UNIT_Game_TC_009            |roll first ';
-sub in { return  (grep @^a, @^b) };
+    '  UNIT_Game_TC_009            |Game init ';
+
+
 my @players_u005 = ($game_u005.first_player, $game_u005.second_player);
 cmp-ok @players_u005, &in, (
         ($game_player1, $game_player2),
         ($game_player2, $game_player1),
 ),
-    ' UNIT_Game_TC_010            |roll first ';
+    ' UNIT_Game_TC_010            |check roll random ';
 
 
 
