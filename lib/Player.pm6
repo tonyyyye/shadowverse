@@ -1,5 +1,6 @@
 use Enum;
 use Entity;
+use Card;
 
 
 =para
@@ -7,13 +8,19 @@ Shadowverse::Entity::Player::Player_jobs::
 What a Player can do.
 
 role Player_jobs {
-    =para
-    Shadowverse::Entity::Player::load_deck::
-    load decks for Player
+    # TODO set opponent_player as Player
+    has $.opponent_player is rw;
+    has Card @.deck is rw;
 
-    method load_deck {
-        # TODO add more details
-        return True;
+    =para
+    Shadowverse::Entity::Player::load_deck()::
+    load deck for Player
+
+    method load_deck(Array:D @deck_by_name) {
+        for ^@deck_by_name {
+            push @!deck, %DATA_OF_CARD{$_};
+        }
+        return self;
     }
 }
 

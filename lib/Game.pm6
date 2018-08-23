@@ -12,9 +12,11 @@ What a Game can do.
 
 role Game_jobs {
     has Int $.type is default(%TYPE_OF{'GAME'});
-    has Player $.player1 is rw;
-    has Player $.player2 is rw;
-    has Player @.players is rw;
+    has Player (
+                 $.player1, $.player2,
+                 $.first_player, $.second_player,
+                 $.current_player,
+             ) is rw;
     has Card @.set_aside is rw;
 
     =para
@@ -27,6 +29,10 @@ role Game_jobs {
     :return: A structured form of its all attributes
 
     method init() {
+        ($!first_player, $.second_player) = self.roll_first;
+        $!first_player.opponent_player = $!second_player;
+        $!second_player.opponent_player = $!first_player;
+        self.load_all_cards();
         return self;
     }
 
@@ -34,7 +40,7 @@ role Game_jobs {
     Shadowverse::Entity::Game::load_all_cards()::
     load all Card by its card_id
 
-    method load_all_cards(--> Hash:D) {
+    method load_all_cards() {
         for @ALL_CARDS_DATA -> $hash_card {
             my $card_name = $hash_card{'card_name'};
             # TODO push Card instead of Hash
@@ -73,7 +79,7 @@ role Game_jobs {
             );
             %DATA_OF_CARD{$card_name} = $card_by_name;
         }
-        return %DATA_OF_CARD;
+        return self;
     }
 
 
@@ -81,12 +87,13 @@ role Game_jobs {
     Shadowverse::Entity::Game::check_card()::
     find a card by its card_name
 
-    method check_card(Str:D $card_name --> Card:D) {
-        if %DATA_OF_CARD{$card_name}.exist {
+    method check_card(Str:D $card_name) {
+        if %DATA_OF_CARD{$card_name}.defined {
                 # info("The card with id: $card_id is found");
                 return %DATA_OF_CARD{$card_name};
         }
-        error("The card with card_name : $card_name does not exist ");
+        error("check_card() error:
+            card_name $card_name does not exist ");
         return False;
     }
 
@@ -95,27 +102,21 @@ role Game_jobs {
     list two Player in normal sequence
 
     method players() {
-        return ($!player1, $!player2);
+        return ($!first_player, $!second_player);
     }
 
     =para
-    Shadowverse::Entity::Game::switch_players()::
-    list two Player in revert sequence
-
-    method switch_players() {
-        return ($!player2, $!player1);
-    }
-
-    =para
-    Shadowverse::Entity::Game::roll()::
+    Shadowverse::Entity::Game::roll_first()::
     roll playing sequence of Player
 
-    method roll() {
-        if (False, True).roll {
-            return self.players();
+    method roll_first() {
+        if ( True, False ).pick {
+            info " Player 1 wins ";
+            ($!player1,$!player2);
         }
         else {
-            return self.switch_players();
+            info " Player 2 wins ";
+            ($!player2,$!player1);
         }
     }
 }
