@@ -11,6 +11,7 @@ role Player_jobs {
     # TODO set opponent_player as Player
     has $.opponent_player is rw;
     has Card @.deck is rw;
+    has $.Game is rw;
 
     =para
     Shadowverse::Entity::Player::load_deck()::
@@ -18,8 +19,9 @@ role Player_jobs {
 
     method load_deck(@deck_by_name) {
         for @deck_by_name {
-            %DATA_OF_CARD{$_}.WHAT.say;
-            @!deck.push(%DATA_OF_CARD{$_});
+            my $card_copy = %DATA_OF_CARD{$_}.clone;
+            $card_copy.Player = self;
+            @!deck.push($card_copy);
         }
         return self;
     }

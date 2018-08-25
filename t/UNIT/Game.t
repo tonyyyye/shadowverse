@@ -10,6 +10,7 @@ my (
     @deck_by_name_of_player1, @deck_by_name_of_player2,
     @deck_of_player1, @deck_of_player2,
 );
+my (%expected_hash,);
 sub in { return  (grep @^a, @^b) };
 
 
@@ -42,18 +43,26 @@ ok my $game_u003 = Game.new(
       ),
     '  UNIT_Game_TC_006            |Game with Player and Card ';
 
-my $game_u004 = Game.new.load_all_cards();
+ok my $game_u004 = Game.new.load_all_cards(),
+    '  UNIT_Game_TC_007            |load_all_cards ';
 is $game_u004.check_card('Fairy Wisp'), %DATA_OF_CARD{'Fairy Wisp'},
-    '  UNIT_Game_TC_007            |check existing card ';
+    '  UNIT_Game_TC_008            |check existing card ';
 
-is $game_u004.check_card('Fairy_Wisp'), False,
-    '  UNIT_Game_TC_008            |check non-existing card ';
+%expected_hash = BLANK => 0;
+is $game_u004.check_card('Fairy_Wisp'), %expected_hash,
+    '  UNIT_Game_TC_009            |check non-existing card ';
 
+# reset %DATA_OF_CARD
+%DATA_OF_CARD =
+    SHADOWVERSE => %BLANK_CARD,
+;
+
+# init once is ok
 ok my $game_u005 = Game.new(
           player1 => $game_player1,
           player2 => $game_player2,
       ).init(),
-    '  UNIT_Game_TC_009            |Game init ';
+    ' UNIT_Game_TC_010            |Game init ';
 
 
 my @players_u005 = ($game_u005.first_player, $game_u005.second_player);
@@ -61,8 +70,7 @@ cmp-ok @players_u005, &in, (
         ($game_player1, $game_player2),
         ($game_player2, $game_player1),
 ),
-    ' UNIT_Game_TC_010            |check roll random ';
-
+    ' UNIT_Game_TC_011            |check random roll ';
 
 
 

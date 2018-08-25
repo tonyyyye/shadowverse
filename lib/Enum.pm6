@@ -6,6 +6,8 @@ List out global value for all modules
 
 ## scalars
 our $IS_DEBUG = True;
+our $IS_PLAYER1_FIRST = True;
+
 =para
 Shadowverse::Enum::ENTITY_COUNT::
 List out Entity sequence as it is created .
@@ -75,6 +77,15 @@ our %CLASS_OF =
     UNDEFINED          => 0,
     CHAOYUEZHE         => 1,
     LONGZU             => 2,
+;
+
+
+=para
+Shadowverse::Enum::BLANK_CARD::
+a blank Card indicates error or default
+
+our %BLANK_CARD =
+    BLANK              => 0,
 ;
 
 
