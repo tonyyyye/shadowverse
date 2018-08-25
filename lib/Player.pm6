@@ -1,6 +1,7 @@
 use Enum;
 use Entity;
 use Card;
+use Hero;
 
 
 =para
@@ -10,8 +11,18 @@ What a Player can do.
 role Player_jobs {
     # TODO set opponent_player as Player
     has $.opponent_player is rw;
-    has Card @.deck is rw;
     has $.Game is rw;
+    has Card @.deck is rw;
+    has Card @.graveyard is rw;
+    has Hero $.hero is rw;
+
+    =para
+    Shadowverse::Entity::Player::init():
+
+    method init() {
+        return self;
+    }
+
 
     =para
     Shadowverse::Entity::Player::load_deck()::

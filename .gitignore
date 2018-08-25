@@ -8,6 +8,7 @@
 *.bs
 
 # Logger
+/log
 *.log
 
 # Devel::Cover

@@ -10,6 +10,7 @@ Shadowverse::Entity::Card::Card_jobs::
 What a Card can do.
 
 role Card_jobs {
+    # json defined
     has $.clan is rw;
     has $.skill is rw;
     has $.cost is rw;
@@ -41,7 +42,11 @@ role Card_jobs {
     has $.skill_disc is rw;
     has $.evo_atk is rw;
     has $.description is rw;
+
+    # user defined
     has $.Player is rw;
+    # minion/spell/other
+    has $.type is rw;
 
     =para
     Shadowverse::Entity::Card::play()::

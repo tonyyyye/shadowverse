@@ -4,6 +4,7 @@ use Entity;
 use Enum;
 use Player;
 use Card;
+use Hero;
 
 
 use-ok 'Player',
@@ -23,10 +24,16 @@ my Card $card_u003;
 my @deck_u003 = [ $card_u003, $card_u003 ];
 ok my $player_u003 = Player.new(
           deck => @deck_u003,
-          #hero => $hero_002,
       ),
     '  UNIT_Player_TC_005          |create Player with parameters ';
 
+my @deck_u004 = @deck_u003;
+my Hero $hero_u004 = Hero.new();
+ok my $player_u004 = Player.new(
+          deck => @deck_u004,
+          hero => $hero_u004,
+      ),
+    '  UNIT_Player_TC_006          |create Player with Hero ';
 
 
 

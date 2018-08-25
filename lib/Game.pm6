@@ -23,7 +23,6 @@ role Game_jobs {
                  $.first_player, $.second_player,
                  $.current_player,
              ) is rw;
-    has Card @.set_aside is rw;
 
     =para
     Shadowverse::Entity::Games::init():
