@@ -167,7 +167,7 @@ role Game_jobs {
 
     method roll_playing_sequence() {
         if ( True, False ).pick {
-            info " Player 1 wins ";
+            # info " Player 1 wins ";
             return ($!player1,$!player2);
         }
         else {
