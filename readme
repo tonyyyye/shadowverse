@@ -1,1 +1,5 @@
 This is a simulator for Game shadowverse, written in Perl6
+To run it, one must install Perl6 first.
+See https://perl6.org/ for more details.
+
+A simple clint is implemented in bin/shadowverse.pl6
