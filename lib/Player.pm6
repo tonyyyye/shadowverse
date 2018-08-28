@@ -1,22 +1,40 @@
-use Log::Async;
 use Enum;
 use Entity;
+use Card;
+use Hero;
 
-logger.send-to('log/INFO.log',  :level(INFO));
-logger.send-to('log/ERROR.log', :level(ERROR));
 
 =para
 Shadowverse::Entity::Player::Player_jobs::
 What a Player can do.
 
 role Player_jobs {
-    =para
-    Shadowverse::Entity::Player::load_deck::
-    load decks for Player
+    # TODO set opponent_player as Player
+    has $.opponent_player is rw;
+    has $.Game is rw;
+    has Card @.deck is rw;
+    has Card @.graveyard is rw;
+    has Hero $.hero is rw;
 
-    method load_deck {
-        # TODO add more details
-        return True;
+    =para
+    Shadowverse::Entity::Player::init():
+
+    method init() {
+        return self;
+    }
+
+
+    =para
+    Shadowverse::Entity::Player::load_deck()::
+    load deck for Player
+
+    method load_deck(@deck_by_name) {
+        for @deck_by_name {
+            my $card_copy = %DATA_OF_CARD{$_}.clone;
+            $card_copy.Player = self;
+            @!deck.push($card_copy);
+        }
+        return self;
     }
 }
 

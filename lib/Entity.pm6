@@ -1,17 +1,17 @@
-use Log::Async;
 use Enum;
 
-
-logger.send-to("log/INFO.log",  :level(INFO));
-logger.send-to("log/ERROR.log", :level(ERROR));
 
 =para
 Shadowverse::Entity::Entity_jobs::
 What a Entity can do.
 
 role Entity_jobs {
+    has Int $.id is rw;
+    has Str $.name is default(%CODE_OF{'DEFAULT_STR'}) is rw;
+    has Int $.type is default(%TYPE_OF{'ENTITY'});
+
     =para
-    Shadowverse::Entity::help::
+    Shadowverse::Entity::help()::
     Show description of a method
     :parameters: The method/instance name that you want to know
     :return: A string form of the description .
@@ -30,7 +30,7 @@ role Entity_jobs {
     }
 
     =para
-    Shadowverse::Entity::entity::
+    Shadowverse::Entity::entity()::
     :parameters: None
     :return: A structured form of its all attributes and methods
 
@@ -56,9 +56,6 @@ Shadowverse::Entity::
 Everything is an Entity .
 
 class Entity does Entity_jobs {
-    has Int $.id is rw;
-    has Str $.name is default(%CODE_OF{'DEFAULT_STR'}) is rw;
-    has Int $.type is default(%TYPE_OF{'ENTITY'});
     # initial things here
     method BUILDALL(|) {
         @PODS.append: $=pod;

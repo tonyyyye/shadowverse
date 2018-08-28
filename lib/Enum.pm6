@@ -6,6 +6,8 @@ List out global value for all modules
 
 ## scalars
 our $IS_DEBUG = True;
+our $IS_PLAYER1_FIRST = True;
+
 =para
 Shadowverse::Enum::ENTITY_COUNT::
 List out Entity sequence as it is created .
@@ -13,8 +15,8 @@ List out Entity sequence as it is created .
 our $ENTITY_COUNT;
 
 # reserve 100001 ~ 101000 as debug code
-our $ENTITY_METHOD = 100001;
-our $ALL_CARDS_FILE = "./doc/cards.json.short";
+our $ENTITY_METHOD     = 100001;
+our $ALL_CARDS_FILE    = "./doc/cards.json.short";
 
 ## arrays
 our @PODS;
@@ -76,3 +78,19 @@ our %CLASS_OF =
     CHAOYUEZHE         => 1,
     LONGZU             => 2,
 ;
+
+
+=para
+Shadowverse::Enum::BLANK_CARD::
+a blank Card indicates error or default
+
+our %BLANK_CARD =
+    BLANK              => 0,
+;
+
+
+=para
+Shadowverse::Enum::DATA_OF_CARD::
+list out all data in Card form
+
+our %DATA_OF_CARD;
