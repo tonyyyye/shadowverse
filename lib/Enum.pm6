@@ -5,8 +5,8 @@ Shadowverse::Enum::
 List out global value for all modules
 
 ## scalars
-our $IS_DEBUG = True;
-our $IS_PLAYER1_FIRST = True;
+our $IS_DEBUG          = True;
+our $IS_PLAYER1_FIRST  = True;
 
 =para
 Shadowverse::Enum::ENTITY_COUNT::
@@ -17,6 +17,7 @@ our $ENTITY_COUNT;
 # reserve 100001 ~ 101000 as debug code
 our $ENTITY_METHOD     = 100001;
 our $ALL_CARDS_FILE    = "./doc/cards.json.short";
+our $DEFAULT_DECK      = "./doc/deck/test.deck";
 
 ## arrays
 our @PODS;

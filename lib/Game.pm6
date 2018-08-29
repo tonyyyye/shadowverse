@@ -18,11 +18,11 @@ What a Game can do.
 
 role Game_jobs {
     has Int $.type is default(%TYPE_OF{'GAME'});
-    has Player (
-                 $.player1, $.player2,
-                 $.first_player, $.second_player,
-                 $.current_player,
-             ) is rw;
+    has Player $.player1 is rw;
+    has Player $.player2 is rw;
+    has Player $.first_player is rw;
+    has Player $.second_player is rw;
+    has Player $.current_player is rw;
 
     =para
     Shadowverse::Entity::Games::init():
@@ -34,13 +34,18 @@ role Game_jobs {
     :return: A structured form of its all attributes
 
     method init() {
-        ($!first_player, $!second_player) = self.roll_playing_sequence;
-        $!first_player.opponent_player = $!second_player;
-        $!second_player.opponent_player = $!first_player;
-        for ($!first_player, $!second_player, $!player1, $!player2,) {
-            .Game = self;
+        $.player1 = Player.new();
+        $.player2 = Player.new();
+        for ($!player1, $!player2,) -> $player {
+            $player.init();
+            $player.Game = self;
         }
-        # if
+        $!player1.opponent_player = $!player2;
+        $!player2.opponent_player = $!player1;
+        ($!first_player, $!second_player) = self.roll_playing_sequence;
+        # $!first_player.opponent_player = $!second_player;
+        # $!second_player.opponent_player = $!first_player;
+
         # self.load_all_cards(); # use in real Game
         return self;
     }
@@ -138,7 +143,6 @@ role Game_jobs {
         return self;
     }
 
-
     =para
     Shadowverse::Entity::Game::check_card()::
     find a card by its card_name
@@ -158,7 +162,7 @@ role Game_jobs {
     list two Player in normal sequence
 
     method players() {
-        return ($!first_player, $!second_player);
+        return ($!current_player, $!current_player.opponent_player);
     }
 
     =para
@@ -171,7 +175,7 @@ role Game_jobs {
             return ($!player1,$!player2);
         }
         else {
-            info " Player 2 wins ";
+            # info " Player 2 wins ";
             $IS_PLAYER1_FIRST = False;
             return ($!player2,$!player1);
         }
@@ -194,8 +198,8 @@ class Game is Entity does Game_jobs does Cheat_jobs {
     method BUILDALL(|) {
         callsame;
         @PODS.append: $=pod;
-        # Reset to 1 when game start
-        $.id = $ENTITY_COUNT = 1;
+        # Entity/Player ID reset to 0/1/2 when Game start
+        $.id = $ENTITY_COUNT = 0;
         self;
     }
 }

@@ -11,8 +11,8 @@ my (
     @deck_of_player1, @deck_of_player2,
 );
 my (%expected_hash,);
-sub in { return  (grep @^a, @^b) };
-
+multi sub in { return  (grep @^a, @^b) };
+multi sub in { return  (grep $^a, @^b) };
 
 use-ok 'Game',
     '  UNIT_Game_TC_001            |class Game ';
@@ -20,11 +20,11 @@ use-ok 'Game',
 ok my $game_u001 = Game.new(),
     '  UNIT_Game_TC_002            |empty Game ';
 
-is $game_u001.id(), 1,
+is $game_u001.id(), 0,
     '  UNIT_Game_TC_003            |Entity ID ';
 
 my $game_u002 = Game.new();
-is $game_u002.id(), 1,
+is $game_u002.id(), 0,
     '  UNIT_Game_TC_004            |Entity ID restart ';
 
 isa-ok $game_u002.load_all_cards, $game_u002,
@@ -58,19 +58,22 @@ is $game_u004.check_card('Fairy_Wisp'), %expected_hash,
 ;
 
 # init once is ok
-ok my $game_u005 = Game.new(
-          player1 => $game_player1,
-          player2 => $game_player2,
-      ).init(),
+ok my $game_u005 = Game.new.init(),
     ' UNIT_Game_TC_010            |Game init ';
 
-
-my @players_u005 = ($game_u005.first_player, $game_u005.second_player);
-cmp-ok @players_u005, &in, (
-        ($game_player1, $game_player2),
-        ($game_player2, $game_player1),
+my @players_id_u005 =
+    ($game_u005.first_player, $game_u005.second_player);
+cmp-ok (@players_id_u005), &in, (
+    ($game_u005.player1, $game_u005.player2),
+    ($game_u005.player2, $game_u005.player1),
 ),
     ' UNIT_Game_TC_011            |check random roll ';
+
+cmp-ok $game_u005.first_player.opponent_player.id, &in, [1,2],
+    ' UNIT_Game_TC_012            |check opponent_player with all forms ';
+
+
+
 
 
 

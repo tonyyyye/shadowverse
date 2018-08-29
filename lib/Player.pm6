@@ -1,7 +1,10 @@
+use Log::Async;
 use Enum;
 use Entity;
 use Card;
 use Hero;
+logger.send-to('log/INFO_Player.log', :level(INFO));
+logger.send-to('log/ERROR_Player.log', :level(ERROR));
 
 
 =para
@@ -28,12 +31,33 @@ role Player_jobs {
     Shadowverse::Entity::Player::load_deck()::
     load deck for Player
 
-    method load_deck(@deck_by_name) {
+    multi method load_deck(@deck_by_name) {
         for @deck_by_name {
             my $card_copy = %DATA_OF_CARD{$_}.clone;
             $card_copy.Player = self;
             @!deck.push($card_copy);
         }
+        return self;
+    }
+
+    multi method load_deck($deck_file) {
+        my ($deck,$data,$class);
+        # TODO deck_check
+        #
+        if not $deck_file.IO.e {
+            error "No such file. Use $DEFAULT_DECK instead ";
+            $deck = $DEFAULT_DECK;
+        }
+
+        my @lines = $deck.IO.lines;
+
+        # $data = slurp $deck;
+
+        # for @deck_by_name {
+        #     my $card_copy = %DATA_OF_CARD{$_}.clone;
+        #     $card_copy.Player = self;
+        #     @!deck.push($card_copy);
+        # }
         return self;
     }
 }
@@ -44,7 +68,6 @@ Shadowverse::Entity::Player::
 A robot or a human controls Player
 
 class Player is Entity does Player_jobs {
-
     method BUILDALL(|) {
         @PODS.append: $=pod;
         callsame;
