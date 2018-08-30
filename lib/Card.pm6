@@ -49,17 +49,25 @@ role Card_jobs {
     has $.type is rw;
 
     =para
+    Shadowverse::Entity::Card::check_playable()::
+    check if Player can play a card with given target(s)
+
+    # TODO check mana/legal
+    method check_playable(:$target?) {
+        return True;
+    }
+
+    =para
     Shadowverse::Entity::Card::play()::
     play a card and do its battlecry
 
     method play(:$target?) {
-        # self.check_playable();
+        self.check_playable();
         if $target {
-            $target.say;
+            info("You have chosen $target as target");
         }
         else {
             info("Player has played $.card_name with no target");
-            # self.entity.say;
         }
         return $!Player;
     }
