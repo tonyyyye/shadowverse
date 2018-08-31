@@ -1,6 +1,5 @@
 use Enum;
 
-
 =para
 Shadowverse::Entity::Entity_jobs::
 What a Entity can do.

@@ -1,13 +1,10 @@
-# To abort the test suite upon first failure
-BEGIN %*ENV<PERL6_TEST_DIE_ON_FAIL> = 1;
-use Test;
 use Log::Async;
-use Terminal::ANSIColor;
 use JSON::Fast;
 use Enum;
 use Entity;
 use Player;
 use Card;
+
 logger.send-to('log/INFO_Game.log', :level(INFO));
 logger.send-to('log/ERROR_Game.log', :level(ERROR));
 

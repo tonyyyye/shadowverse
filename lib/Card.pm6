@@ -1,9 +1,9 @@
+use Log::Async;
 use Enum;
 use Entity;
-use Log::Async;
-
 
 logger.send-to('log/INFO_Card.log',  :level(INFO));
+logger.send-to('log/DEBUG_Card.log', :level(DEBUG));
 
 =para
 Shadowverse::Entity::Card::Card_jobs::
@@ -43,10 +43,21 @@ role Card_jobs {
     has $.evo_atk is rw;
     has $.description is rw;
 
-    # user defined
+    ## user defined
+    # parent Player, or the owner
     has $.Player is rw;
+    has Bool $.selectable is rw;
     # minion/spell/other
     has $.type is rw;
+
+    =para
+    Shadowverse::Entity::Card::check_selectable()::
+    check if a target Card can be selected
+
+    # TODO check selectable
+    method check_selectable($target) {
+        return True;
+    }
 
     =para
     Shadowverse::Entity::Card::check_playable()::
@@ -54,6 +65,9 @@ role Card_jobs {
 
     # TODO check mana/legal
     method check_playable(:$target?) {
+        if $target.defined {
+            $target.check_selectable();
+        }
         return True;
     }
 
@@ -64,10 +78,10 @@ role Card_jobs {
     method play(:$target?) {
         self.check_playable();
         if $target {
-            info("You have chosen $target as target");
+            debug("You have chosen $target as target");
         }
         else {
-            info("Player has played $.card_name with no target");
+            debug("Player has played $.card_name with no target");
         }
         return $!Player;
     }

@@ -6,14 +6,18 @@ use Card;
 logger.send-to('log/INFO_Hero.log', :level(INFO));
 logger.send-to('log/ERROR_Hero.log', :level(ERROR));
 
-
 =para
 Shadowverse::Entity::Hero::Hero_jobs::
 What a Hero can do.
 
 role Hero_jobs {
-    method attack {
-        error('Hero cannot do anything including attack ');
+
+    =para
+    Shadowverse::Entity::Hero::attack()::
+    Hero attack action
+
+    method attack($target) {
+        debug('Hero cannot do anything including attack ');
         return self;
     }
 }
