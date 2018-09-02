@@ -35,7 +35,6 @@ ok my $player_u004 = Player.new(
       ),
     '  UNIT_Player_TC_006          |create Player with Hero ';
 
-$player_u004.load_deck("./doc/test.deck");
 
 
 

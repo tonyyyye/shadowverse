@@ -19,7 +19,7 @@ is $card_u002.id, 2,
     '  UNIT_Card_TC_004            |Entity ID increases ';
 
 $card_u002.play();
-$card_u002.play(target => 1);
+# $card_u002.play(target => 1);
 
 
 

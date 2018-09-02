@@ -15,11 +15,11 @@ logger.send-to('log/ERROR.log', :level(ERROR));
 my $game_index = 10010000;
 my $tc_index = 0;
 my (
-    $blank_count, $blank_content,
-    $game_player1, $game_player2,
+    $blank_count,            $blank_content,
+    $game_player1,           $game_player2,
+    $deck_file_of_player1,   $deck_file_of_player2,
 );
 my (
-    @deck_by_name_of_player1, @deck_by_name_of_player2,
     @deck_of_player1, @deck_of_player2,
 );
 
@@ -33,7 +33,7 @@ sub case($text) {
 }
 
 subtest {
-    ok my $game_10010001 = Game.new.load_all_cards("./doc/cards.json.short"),
+    ok my $game_10010001 = Game.new.load_all_cards(),
         case('an empty Game with json profile ');
 
 
@@ -55,10 +55,10 @@ colored('Basic Game test ','bold blue on_yellow');
 subtest {
     $game_index = 10020000;
     $tc_index = 0;
-    @deck_by_name_of_player1 =  [ 'Blessings of Creation', ];
-    @deck_by_name_of_player2 =  [ 'Fairy Wisp', ];
-    $game_player1 = Player.new.load_deck(@deck_by_name_of_player1);
-    $game_player2 = Player.new.load_deck(@deck_by_name_of_player2);
+    $deck_file_of_player1 =  'one_card.deck';
+    $deck_file_of_player2 =  'one_card.deck';
+    $game_player1 = Player.new.load_deck($deck_file_of_player1);
+    $game_player2 = Player.new.load_deck($deck_file_of_player2);
 
     ok my $game_10020001 = Game.new(
             player1 => $game_player1,
@@ -77,10 +77,10 @@ subtest {
     $game_index = 10030000;
     $tc_index = 0;
 
-    @deck_by_name_of_player1 =  [ 'Blessings of Creation', 'Fairy Wisp', ];
-    @deck_by_name_of_player2 =  [ 'Fairy Wisp', 'Blessings of Creation', ];
-    $game_player1 = Player.new.load_deck(@deck_by_name_of_player1);
-    $game_player2 = Player.new.load_deck(@deck_by_name_of_player2);
+    $deck_file_of_player1 =  'more_cards.deck';
+    $deck_file_of_player2 =  'more_cards.deck';
+    $game_player1 = Player.new.load_deck($deck_file_of_player1);
+    $game_player2 = Player.new.load_deck($deck_file_of_player2);
 
     my $game_10030001 = Game.new(
            player1 => $game_player1,

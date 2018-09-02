@@ -27,7 +27,7 @@ my $game_u002 = Game.new();
 is $game_u002.id(), 0,
     '  UNIT_Game_TC_004            |Entity ID restart ';
 
-isa-ok $game_u002.load_all_cards, $game_u002,
+isa-ok $game_u002.load_all_cards(), Game,
     '  UNIT_Game_TC_005            |load all cards by Game ';
 
 for ^40 {

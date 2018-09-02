@@ -17,7 +17,7 @@ role Hero_jobs {
     Hero attack action
 
     method attack($target) {
-        debug('Hero cannot do anything including attack ');
+        error 'Hero cannot do anything including attack ';
         return self;
     }
 }

@@ -18,8 +18,8 @@ my $hero_u002 = Hero.new(card_name => 'chaoyuezhe');
 is $hero_u002.id, 2,
     '  UNIT_Hero_TC_004            |Entity ID increases ';
 
-$hero_u002.play();
-$hero_u002.play(target => 1);
+# ok $hero_u002.play();
+
 
 
 

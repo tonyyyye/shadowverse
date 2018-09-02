@@ -46,27 +46,21 @@ role Card_jobs {
     ## user defined
     # parent Player, or the owner
     has $.Player is rw;
-    has Bool $.selectable is rw;
-    # minion/spell/other
+    has Bool $.is_selectable is default(True) is rw;
+    # minion/spell/Hero/other
     has $.type is rw;
 
     =para
-    Shadowverse::Entity::Card::check_selectable()::
-    check if a target Card can be selected
-
-    # TODO check selectable
-    method check_selectable($target) {
-        return True;
-    }
-
-    =para
-    Shadowverse::Entity::Card::check_playable()::
+    Shadowverse::Entity::Card::is_playable()::
     check if Player can play a card with given target(s)
 
     # TODO check mana/legal
-    method check_playable(:$target?) {
+    method is_playable(Entity:D :$target? --> Bool:D) {
+        # return False if $!cost > self.Player.mana
         if $target.defined {
-            $target.check_selectable();
+            debug "check playing $!card_name with target";
+            # $target.is_selectable();
+            return True;
         }
         return True;
     }
@@ -75,13 +69,19 @@ role Card_jobs {
     Shadowverse::Entity::Card::play()::
     play a card and do its battlecry
 
-    method play(:$target?) {
-        self.check_playable();
-        if $target {
-            debug("You have chosen $target as target");
+    method play(:$card_playing_target?) {
+        if $card_playing_target {
+            debug "You have chosen $card_playing_target as target";
+            if self.is_playable($card_playing_target) {
+                debug "Now playing";
+                # TODO card action
+            }
+            else {
+                error "not able to play"
+            }
         }
         else {
-            debug("Player has played $.card_name with no target");
+            debug "Player has played $.card_name with no target";
         }
         return $!Player;
     }

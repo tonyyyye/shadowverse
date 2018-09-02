@@ -6,6 +6,7 @@ use Player;
 use Card;
 
 logger.send-to('log/INFO_Game.log', :level(INFO));
+logger.send-to('log/DEBUG_Game.log', :level(DEBUG));
 logger.send-to('log/ERROR_Game.log', :level(ERROR));
 
 
@@ -33,7 +34,7 @@ role Game_jobs {
     method init() {
         $.player1 = Player.new();
         $.player2 = Player.new();
-        for ($!player1, $!player2,) -> $player {
+        for ($!player1, $!player2) -> $player {
             $player.init();
             $player.Game = self;
         }
@@ -49,55 +50,12 @@ role Game_jobs {
 
     =para
     Shadowverse::Entity::Game::load_all_cards()::
-    load all Card by its card_id
+    load all Card by its card_name
 
-    multi method load_all_cards() {
-        %DATA_OF_CARD = SHADOWVERSE => %BLANK_CARD;
-        for @ALL_CARDS_DATA -> $hash_card {
-            my $card_name = $hash_card{'card_name'};
-            my Card $card_by_name = Card.new(
-                clan                         => $hash_card{'clan'},
-                skill                        => $hash_card{'skill'},
-                cost                         => $hash_card{'cost'},
-                life                         => $hash_card{'life'},
-                base_card_id                 => $hash_card{'base_card_id'},
-                org_skill_disc               => $hash_card{'org_skill_disc'},
-                atk                          => $hash_card{'atk'},
-                get_red_ether                => $hash_card{'get_red_ether'},
-                normal_card_id               => $hash_card{'normal_card_id'},
-                copyright                    => $hash_card{'copyright'},
-                tokens                       => $hash_card{'tokens'},
-                format_type                  => $hash_card{'format_type'},
-                evo_description              => $hash_card{'evo_description'},
-                card_set_id                  => $hash_card{'card_set_id'},
-                card_name                    => $hash_card{'card_name'},
-                char_type                    => $hash_card{'char_type'},
-                skill_option                 => $hash_card{'skill_option'},
-                rarity                       => $hash_card{'rarity'},
-                foil_card_id                 => $hash_card{'foil_card_id'},
-                evo_skill_disc               => $hash_card{'evo_skill_disc'},
-                cv                           => $hash_card{'cv'},
-                restricted_count             => $hash_card{'restricted_count'},
-                card_id                      => $hash_card{'card_id'},
-                tribe_name                   => $hash_card{'tribe_name'},
-                org_evo_skill_disc           => $hash_card{'org_evo_skill_disc'},
-                evo_life                     => $hash_card{'evo_life'},
-                use_red_ether                => $hash_card{'use_red_ether'},
-                is_foil                      => $hash_card{'is_foil'},
-                skill_disc                   => $hash_card{'skill_disc'},
-                evo_atk                      => $hash_card{'evo_atk'},
-                description                  => $hash_card{'description'},
-            );
-            %DATA_OF_CARD{$card_name} = $card_by_name;
-        }
-        # get self by default
-        return self;
-    }
-
-    multi method load_all_cards($file) {
+    method load_all_cards() {
         # modify the json file name
         @ALL_CARDS_DATA =
-            from-json(slurp $file){'data'}{'cards'}.clone;
+            from-json(slurp $ALL_CARDS_FILE){'data'}{'cards'}.clone;
         %DATA_OF_CARD = SHADOWVERSE => %BLANK_CARD;
         for @ALL_CARDS_DATA -> $hash_card {
             my $card_name = $hash_card{'card_name'};
@@ -146,11 +104,11 @@ role Game_jobs {
 
     method check_card(Str:D $card_name) {
         if %DATA_OF_CARD{$card_name}.defined {
-                # info("The card with id: $card_id is found");
+                debug "The card with name: $card_name is found";
                 return %DATA_OF_CARD{$card_name};
         }
-        error("check_card() error:
-            card_name $card_name does not exist ");
+
+        error "card_name $card_name does not exist ";
         return %DATA_OF_CARD{'SHADOWVERSE'};
     }
 
@@ -168,11 +126,11 @@ role Game_jobs {
 
     method roll_playing_sequence() {
         if ( True, False ).pick {
-            # info " Player 1 wins ";
+            debug " Player 1 wins ";
             return ($!player1,$!player2);
         }
         else {
-            # info " Player 2 wins ";
+            debug " Player 2 wins ";
             $IS_PLAYER1_FIRST = False;
             return ($!player2,$!player1);
         }
@@ -181,7 +139,7 @@ role Game_jobs {
 
 =para
 Shadowverse::Entity::Game::Cheat_jobs::
-Give privileges to do something
+Give Player privileges to do something
 
 role Cheat_jobs {
 

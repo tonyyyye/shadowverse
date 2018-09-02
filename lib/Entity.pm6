@@ -20,8 +20,7 @@ role Entity_jobs {
         my %comment_of;
         for @PODS -> $pod {
             for $pod.contents -> $pod_content {
-                my $content = $pod_content.contents;
-                my @contents = split('::', $content);
+                my @contents = split('::', $pod_content.contents);
                 %comment_of{@contents[*-2]} = @contents[*-1];
             }
         }
@@ -37,7 +36,7 @@ role Entity_jobs {
         my %entity_hash;
         my ($entity_key,$entity_value);
         for self.^attributes() -> $attribute {
-            if  ( $entity_value = $attribute.get_value(self) ) {
+            if ( $entity_value = $attribute.get_value(self) ) {
                 $entity_key = split('!',$attribute.Str)[1];
                 %entity_hash{$entity_key} = $entity_value;
             }
