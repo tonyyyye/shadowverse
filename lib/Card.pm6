@@ -69,20 +69,28 @@ role Card_jobs {
     Shadowverse::Entity::Card::play()::
     play a card and do its battlecry
 
-    method play(:$card_playing_target?) {
-        if $card_playing_target {
-            debug "You have chosen $card_playing_target as target";
-            if self.is_playable($card_playing_target) {
+    method play(:$selected_target?, :@fixed_targets?) {
+        # Card can have one of these:
+        # a:only one user-selected target with other fixed targets
+        # b:random target yield or all together
+        # c:all the targets that are available by description
+
+        if $selected_target.defined {
+            debug "You have chosen $selected_target as target";
+            if self.is_playable($selected_target) {
                 debug "Now playing";
-                # TODO card action
             }
             else {
-                error "not able to play"
+                error "Card.play(): not able to play";
             }
+        }
+        elsif @fixed_targets.elems {
+            debug "You have chosen $selected_target as target";
         }
         else {
             debug "Player has played $.card_name with no target";
         }
+        # TODO card action
         return $!Player;
     }
 }
