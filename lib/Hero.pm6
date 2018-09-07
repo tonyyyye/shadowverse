@@ -27,7 +27,7 @@ role Hero_jobs {
 Shadowverse::Entity::Hero::
 An Entity that exists until Game ends
 
-class Hero is Card is Entity does Hero_jobs {
+class Hero is Entity does Hero_jobs {
     method BUILDALL(|) {
         @PODS.append: $=pod;
         callsame;

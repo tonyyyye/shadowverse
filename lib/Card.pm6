@@ -43,12 +43,14 @@ role Card_jobs {
     has $.evo_atk is rw;
     has $.description is rw;
 
+
     ## user defined
     # parent Player, or the owner
     has $.Player is rw;
     has Bool $.is_selectable is default(True) is rw;
     # minion/spell/Hero/other
     has $.type is rw;
+    has Bool $.is_minion is rw;
 
     =para
     Shadowverse::Entity::Card::is_playable()::
