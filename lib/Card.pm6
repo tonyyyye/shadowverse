@@ -2,8 +2,9 @@ use Log::Async;
 use Enum;
 use Entity;
 
-logger.send-to('log/INFO_Card.log',  :level(INFO));
-logger.send-to('log/DEBUG_Card.log', :level(DEBUG));
+logger.send-to("$LOG_DIR/INFO_Card.log",  :level(INFO));
+logger.send-to("$LOG_DIR/DEBUG_Card.log", :level(DEBUG));
+logger.send-to("$LOG_DIR/ERROR_Card.log", :level(ERROR));
 
 =para
 Shadowverse::Entity::Card::Card_jobs::
@@ -43,14 +44,25 @@ role Card_jobs {
     has $.evo_atk is rw;
     has $.description is rw;
 
-
+    has Int $.type is default(%TYPE_OF{'CARD'});
     ## user defined
     # parent Player, or the owner
     has $.Player is rw;
-    has Bool $.is_selectable is default(True) is rw;
+    # countdown for rune
+    has Int $!count_down;
+    has Int $.zone is default(%CODE_OF_ZONE{'INFINITY'}) is rw;
     # minion/spell/Hero/other
-    has $.type is rw;
     has Bool $.is_minion is rw;
+    ## function
+    has Bool $.is_selectable is default(True) is rw;
+    has Bool $.can_attack is rw;
+    has @.battlecry_targets is rw;
+
+    multi method new($card_name) {
+        debug "Creating [$card_name]";
+        # return self.bless(:$card_name);
+        return %DATA_OF_CARD{$card_name};
+    }
 
     =para
     Shadowverse::Entity::Card::is_playable()::
@@ -58,7 +70,9 @@ role Card_jobs {
 
     # TODO check mana/legal
     method is_playable(Entity:D :$target? --> Bool:D) {
-        # return False if $!cost > self.Player.mana
+        if $!cost < $!Player.mana {
+            error "not enough mana";
+        }
         if $target.defined {
             debug "check playing $!card_name with target";
             # $target.is_selectable();
@@ -68,27 +82,28 @@ role Card_jobs {
     }
 
     =para
-    Shadowverse::Entity::Card::play()::
+    Shadowverse::Entity::Card::be_played()::
     play a card and do its battlecry
 
-    method play(:$selected_target?, :@fixed_targets?) {
+    method be_played(:$target?) {
         # Card can have one of these:
         # a:only one user-selected target with other fixed targets
         # b:random target yield or all together
         # c:all the targets that are available by description
 
-        if $selected_target.defined {
-            debug "You have chosen $selected_target as target";
-            if self.is_playable($selected_target) {
+        if $target.defined {
+            debug "You have chosen $target as target";
+            if self.is_playable($target) {
                 debug "Now playing";
             }
             else {
-                error "Card.play(): not able to play";
+                error "Card.be_played(): not able to play";
             }
         }
-        elsif @fixed_targets.elems {
-            debug "You have chosen $selected_target as target";
-        }
+        # TODO strictly when no fixed targets exists. AOE can be played
+       # elsif $targets.defined {
+       #     debug "You have chosen $targets as target";
+       # }
         else {
             debug "Player has played $.card_name with no target";
         }

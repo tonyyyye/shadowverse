@@ -1,4 +1,10 @@
+use Log::Async;
 use Enum;
+
+mkdir $LOG_DIR if not $LOG_DIR.IO.e;
+logger.send-to("$LOG_DIR/INFO_Entity.log",  :level(INFO));
+logger.send-to("$LOG_DIR/DEBUG_Entity.log", :level(DEBUG));
+logger.send-to("$LOG_DIR/ERROR_Entity.log", :level(ERROR));
 
 =para
 Shadowverse::Entity::Entity_jobs::
@@ -60,6 +66,8 @@ class Entity does Entity_jobs {
         # call the parent classes (or default) BUILDALL
         callsame;
         $.id = $ENTITY_COUNT += 1;
+        debug "DEBUG_Entity:
+            Creating new Entity with $.id ";
         # return the fully built object
         self;
     }
