@@ -3,12 +3,13 @@ use JSON::Fast;
 use Enum;
 use Entity;
 use Player;
+use Hero;
 use Card;
 
-logger.send-to('log/INFO_Game.log', :level(INFO));
-logger.send-to('log/DEBUG_Game.log', :level(DEBUG));
-logger.send-to('log/ERROR_Game.log', :level(ERROR));
-
+# INFO for Game.xml
+logger.send-to("$LOG_DIR/INFO_Game.log", :level(INFO));
+logger.send-to("$LOG_DIR/DEBUG_Game.log", :level(DEBUG));
+logger.send-to("$LOG_DIR/ERROR_Game.log", :level(ERROR));
 
 =para
 Shadowverse::Entity::Game::Game_jobs::
@@ -31,22 +32,39 @@ role Game_jobs {
     :param:  TODO None
     :return: A structured form of its all attributes
 
-    method init() {
+    multi method init() {
         $.player1 = Player.new();
         $.player2 = Player.new();
         for ($!player1, $!player2) -> $player {
             $player.init();
+            $player.Hero = Hero.new.init();
             $player.Game = self;
         }
         $!player1.opponent_player = $!player2;
         $!player2.opponent_player = $!player1;
         ($!first_player, $!second_player) = self.roll_playing_sequence;
-        # $!first_player.opponent_player = $!second_player;
-        # $!second_player.opponent_player = $!first_player;
-
-        # self.load_all_cards(); # use in real Game
+        $!first_player.opponent_player = $!second_player;
+        $!second_player.opponent_player = $!first_player;
+        self.load_all_cards();
+        # FIXME ENTITY_COUNT bug
+        # $ENTITY_COUNT.say;
+        # self.current_player.id.say;
         return self;
     }
+    multi method init($deck_of_player1,$deck_of_player2) {
+        $!player1 = Player.new();
+        $!player1.init($deck_of_player1);
+        $!player2 = Player.new();
+        $!player2.init($deck_of_player2);
+        $!player1.Game = $!player2.Game = self;
+        $!player1.opponent_player = $!player2;
+        $!player2.opponent_player = $!player1;
+        ($!first_player, $!second_player) = self.roll_playing_sequence;
+        $!first_player.opponent_player = $!second_player;
+        $!second_player.opponent_player = $!first_player;
+        self.load_all_cards();
+        return self;
+     }
 
     =para
     Shadowverse::Entity::Game::load_all_cards()::

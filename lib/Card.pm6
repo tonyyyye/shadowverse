@@ -101,14 +101,51 @@ role Card_jobs {
             }
         }
         # TODO strictly when no fixed targets exists. AOE can be played
-       # elsif $targets.defined {
-       #     debug "You have chosen $targets as target";
-       # }
         else {
             debug "Player has played $.card_name with no target";
         }
+        # played in field
+        if ($!type == %TYPE_OF{'SPELL'}) {
+            $!zone = %CODE_OF_ZONE{'GRAVEYARD'};
+        }
+        else {
+            $!zone = %CODE_OF_ZONE{'FIELD'};
+            $!Player.field.push(self);
+        }
         # TODO card action
-        return $!Player;
+        return self;
+    }
+    method countdown() {
+        if $!type != %TYPE_OF{'RUNE'} {
+            error 'Not a rune, cannot countdown';
+            return False;
+        }
+        $!count_down--;
+        # FIXME check_death;
+        return self;
+    }
+
+    =para
+    Shadowverse::Entity::Card::is_able_to_attack()::
+    check a minion's attack choise is legal
+
+    method is_able_to_attack($target) {
+        # if $target.id < 1
+        # check $target exists
+        # say $target.type ~~ m/minion|Hero/;
+        return True;
+    }
+
+    =para
+    Shadowverse::Entity::Card::attack()::
+    a minion attack another minion or Hero
+
+    method attack($target) {
+        # if not self.is_able_to_attack($target) {
+        #     error "$target cannot be attack target ";
+        # }
+        debug "attack [yy]";
+        return self;
     }
 }
 

@@ -5,15 +5,15 @@ Shadowverse::Enum::
 List out global value for all modules
 
 ## scalars
-our $IS_DEBUG     = True;
-our $IS_PLAYER1_FIRST;
-our $CURRENT_PLAYER_ID;
+our $IS_DEBUG          = True;
+our $IS_PLAYER1_FIRST  = True;
+our $CURRENT_PLAYER_ID = 1;
+our $MAX_HERO_LIFE     = 40;
 
 =para
 Shadowverse::Enum::ENTITY_COUNT::
 List out Entity sequence as it is created
-Especially, as it is initialized in Game
-Game had ENTITY_COUNT 0 and Player 1/2 has 1/2
+Especially, Game has ENTITY_COUNT 0 and Player 1/2 has 1/2
 
 our $ENTITY_COUNT;
 
@@ -107,6 +107,10 @@ list out common operation code of Player
 
 our %CODE_OF_OPERATION =
     CONCEDE            => 10002001,
+    END_TURN           => 10002001,
+    CARD_PLAY          => 10002003,
+    MINION_CTRL        => 10002004,
+    CONCEDE            => 10002886,
 ;
 
 =para
