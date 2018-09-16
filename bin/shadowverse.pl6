@@ -5,10 +5,10 @@ use JSON::Fast;
 use lib <lib>;
 use Enum;
 use Entity;
-use Hero;
 use Game;
 use Player;
 use Card;
+use Hero;
 
 logger.send-to('log/INFO.log',  :level(INFO));
 logger.send-to('log/ERROR.log', :level(ERROR));
@@ -25,4 +25,3 @@ my $game = Game.new(
 # choose deck
 # display field and Hero
 # minion action:attack
-# Player action:play Card

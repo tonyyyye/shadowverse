@@ -1,5 +1,10 @@
+use Log::Async;
 use Enum;
 
+mkdir $LOG_DIR if not $LOG_DIR.IO.e;
+logger.send-to("$LOG_DIR/INFO_Entity.log",  :level(INFO));
+logger.send-to("$LOG_DIR/DEBUG_Entity.log", :level(DEBUG));
+logger.send-to("$LOG_DIR/ERROR_Entity.log", :level(ERROR));
 
 =para
 Shadowverse::Entity::Entity_jobs::
@@ -21,8 +26,7 @@ role Entity_jobs {
         my %comment_of;
         for @PODS -> $pod {
             for $pod.contents -> $pod_content {
-                my $content = $pod_content.contents;
-                my @contents = split('::', $content);
+                my @contents = split('::', $pod_content.contents);
                 %comment_of{@contents[*-2]} = @contents[*-1];
             }
         }
@@ -38,7 +42,7 @@ role Entity_jobs {
         my %entity_hash;
         my ($entity_key,$entity_value);
         for self.^attributes() -> $attribute {
-            if  ( $entity_value = $attribute.get_value(self) ) {
+            if ( $entity_value = $attribute.get_value(self) ) {
                 $entity_key = split('!',$attribute.Str)[1];
                 %entity_hash{$entity_key} = $entity_value;
             }
@@ -62,6 +66,8 @@ class Entity does Entity_jobs {
         # call the parent classes (or default) BUILDALL
         callsame;
         $.id = $ENTITY_COUNT += 1;
+        debug "DEBUG_Entity:
+            Creating new Entity with $.id ";
         # return the fully built object
         self;
     }

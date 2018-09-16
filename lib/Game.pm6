@@ -1,16 +1,15 @@
-# To abort the test suite upon first failure
-BEGIN %*ENV<PERL6_TEST_DIE_ON_FAIL> = 1;
-use Test;
 use Log::Async;
-use Terminal::ANSIColor;
 use JSON::Fast;
 use Enum;
 use Entity;
 use Player;
+use Hero;
 use Card;
-logger.send-to('log/INFO_Game.log', :level(INFO));
-logger.send-to('log/ERROR_Game.log', :level(ERROR));
 
+# INFO for Game.xml
+logger.send-to("$LOG_DIR/INFO_Game.log", :level(INFO));
+logger.send-to("$LOG_DIR/DEBUG_Game.log", :level(DEBUG));
+logger.send-to("$LOG_DIR/ERROR_Game.log", :level(ERROR));
 
 =para
 Shadowverse::Entity::Game::Game_jobs::
@@ -18,11 +17,11 @@ What a Game can do.
 
 role Game_jobs {
     has Int $.type is default(%TYPE_OF{'GAME'});
-    has Player (
-                 $.player1, $.player2,
-                 $.first_player, $.second_player,
-                 $.current_player,
-             ) is rw;
+    has Player $.player1 is rw;
+    has Player $.player2 is rw;
+    has Player $.first_player is rw;
+    has Player $.second_player is rw;
+    has Player $.current_player is rw;
 
     =para
     Shadowverse::Entity::Games::init():
@@ -33,111 +32,95 @@ role Game_jobs {
     :param:  TODO None
     :return: A structured form of its all attributes
 
-    method init() {
+    multi method init() {
+        $.player1 = Player.new();
+        $.player2 = Player.new();
+        for ($!player1, $!player2) -> $player {
+            $player.init();
+            $player.Hero = Hero.new.init();
+            $player.Game = self;
+        }
+        $!player1.opponent_player = $!player2;
+        $!player2.opponent_player = $!player1;
         ($!first_player, $!second_player) = self.roll_playing_sequence;
         $!first_player.opponent_player = $!second_player;
         $!second_player.opponent_player = $!first_player;
-        for ($!first_player, $!second_player, $!player1, $!player2,) {
-            .Game = self;
-        }
-        # if
-        # self.load_all_cards(); # use in real Game
+        self.load_all_cards();
+        # FIXME ENTITY_COUNT bug
+        # $ENTITY_COUNT.say;
+        # self.current_player.id.say;
         return self;
     }
+    multi method init($deck_of_player1,$deck_of_player2) {
+        $!player1 = Player.new();
+        $!player1.init($deck_of_player1);
+        $!player2 = Player.new();
+        $!player2.init($deck_of_player2);
+        $!player1.Game = $!player2.Game = self;
+        $!player1.opponent_player = $!player2;
+        $!player2.opponent_player = $!player1;
+        ($!first_player, $!second_player) = self.roll_playing_sequence;
+        $!first_player.opponent_player = $!second_player;
+        $!second_player.opponent_player = $!first_player;
+        self.load_all_cards();
+        return self;
+     }
 
     =para
     Shadowverse::Entity::Game::load_all_cards()::
-    load all Card by its card_id
+    load all Card by its card_name
 
-    multi method load_all_cards() {
-        %DATA_OF_CARD = SHADOWVERSE => %BLANK_CARD;
-        for @ALL_CARDS_DATA -> $hash_card {
-            my $card_name = $hash_card{'card_name'};
-            my Card $card_by_name = Card.new(
-                clan                         => $hash_card{'clan'},
-                skill                        => $hash_card{'skill'},
-                cost                         => $hash_card{'cost'},
-                life                         => $hash_card{'life'},
-                base_card_id                 => $hash_card{'base_card_id'},
-                org_skill_disc               => $hash_card{'org_skill_disc'},
-                atk                          => $hash_card{'atk'},
-                get_red_ether                => $hash_card{'get_red_ether'},
-                normal_card_id               => $hash_card{'normal_card_id'},
-                copyright                    => $hash_card{'copyright'},
-                tokens                       => $hash_card{'tokens'},
-                format_type                  => $hash_card{'format_type'},
-                evo_description              => $hash_card{'evo_description'},
-                card_set_id                  => $hash_card{'card_set_id'},
-                card_name                    => $hash_card{'card_name'},
-                char_type                    => $hash_card{'char_type'},
-                skill_option                 => $hash_card{'skill_option'},
-                rarity                       => $hash_card{'rarity'},
-                foil_card_id                 => $hash_card{'foil_card_id'},
-                evo_skill_disc               => $hash_card{'evo_skill_disc'},
-                cv                           => $hash_card{'cv'},
-                restricted_count             => $hash_card{'restricted_count'},
-                card_id                      => $hash_card{'card_id'},
-                tribe_name                   => $hash_card{'tribe_name'},
-                org_evo_skill_disc           => $hash_card{'org_evo_skill_disc'},
-                evo_life                     => $hash_card{'evo_life'},
-                use_red_ether                => $hash_card{'use_red_ether'},
-                is_foil                      => $hash_card{'is_foil'},
-                skill_disc                   => $hash_card{'skill_disc'},
-                evo_atk                      => $hash_card{'evo_atk'},
-                description                  => $hash_card{'description'},
-            );
-            %DATA_OF_CARD{$card_name} = $card_by_name;
-        }
-        # get self by default
-        return self;
-    }
-
-    multi method load_all_cards($file) {
+    method load_all_cards() {
         # modify the json file name
         @ALL_CARDS_DATA =
-            from-json(slurp $file){'data'}{'cards'}.clone;
-        %DATA_OF_CARD = SHADOWVERSE => %BLANK_CARD;
-        for @ALL_CARDS_DATA -> $hash_card {
-            my $card_name = $hash_card{'card_name'};
+            from-json(slurp $ALL_CARDS_FILE){'data'}{'cards'}.clone;
             my Card $card_by_name = Card.new(
-                clan                         => $hash_card{'clan'},
-                skill                        => $hash_card{'skill'},
-                cost                         => $hash_card{'cost'},
-                life                         => $hash_card{'life'},
-                base_card_id                 => $hash_card{'base_card_id'},
-                org_skill_disc               => $hash_card{'org_skill_disc'},
-                atk                          => $hash_card{'atk'},
-                get_red_ether                => $hash_card{'get_red_ether'},
-                normal_card_id               => $hash_card{'normal_card_id'},
-                copyright                    => $hash_card{'copyright'},
-                tokens                       => $hash_card{'tokens'},
-                format_type                  => $hash_card{'format_type'},
-                evo_description              => $hash_card{'evo_description'},
-                card_set_id                  => $hash_card{'card_set_id'},
-                card_name                    => $hash_card{'card_name'},
-                char_type                    => $hash_card{'char_type'},
-                skill_option                 => $hash_card{'skill_option'},
-                rarity                       => $hash_card{'rarity'},
-                foil_card_id                 => $hash_card{'foil_card_id'},
-                evo_skill_disc               => $hash_card{'evo_skill_disc'},
-                cv                           => $hash_card{'cv'},
-                restricted_count             => $hash_card{'restricted_count'},
-                card_id                      => $hash_card{'card_id'},
-                tribe_name                   => $hash_card{'tribe_name'},
-                org_evo_skill_disc           => $hash_card{'org_evo_skill_disc'},
-                evo_life                     => $hash_card{'evo_life'},
-                use_red_ether                => $hash_card{'use_red_ether'},
-                is_foil                      => $hash_card{'is_foil'},
-                skill_disc                   => $hash_card{'skill_disc'},
-                evo_atk                      => $hash_card{'evo_atk'},
-                description                  => $hash_card{'description'},
-            );
+        card_name => %CODE_OF{'DEFAULT_STR'},
+        card_id   => %CODE_OF{'DEFAULT_CARD_ID'},
+        );
+    # blank Card for test
+    %DATA_OF_CARD = SHADOWVERSE => $card_by_name;
+    for @ALL_CARDS_DATA -> $attribute_of {
+        my $card_name = $attribute_of{'card_name'};
+        $card_by_name = Card.new(
+            clan                         => $attribute_of{'clan'},
+            skill                        => $attribute_of{'skill'},
+            cost                         => $attribute_of{'cost'},
+            life                         => $attribute_of{'life'},
+            base_card_id                 => $attribute_of{'base_card_id'},
+            org_skill_disc               => $attribute_of{'org_skill_disc'},
+            atk                          => $attribute_of{'atk'},
+            get_red_ether                => $attribute_of{'get_red_ether'},
+            normal_card_id               => $attribute_of{'normal_card_id'},
+            copyright                    => $attribute_of{'copyright'},
+            tokens                       => $attribute_of{'tokens'},
+            format_type                  => $attribute_of{'format_type'},
+            evo_description              => $attribute_of{'evo_description'},
+            card_set_id                  => $attribute_of{'card_set_id'},
+            card_name                    => $attribute_of{'card_name'},
+            char_type                    => $attribute_of{'char_type'},
+            skill_option                 => $attribute_of{'skill_option'},
+            rarity                       => $attribute_of{'rarity'},
+            foil_card_id                 => $attribute_of{'foil_card_id'},
+            evo_skill_disc               => $attribute_of{'evo_skill_disc'},
+            cv                           => $attribute_of{'cv'},
+            restricted_count             => $attribute_of{'restricted_count'},
+            card_id                      => $attribute_of{'card_id'},
+            tribe_name                   => $attribute_of{'tribe_name'},
+            org_evo_skill_disc           => $attribute_of{'org_evo_skill_disc'},
+            evo_life                     => $attribute_of{'evo_life'},
+            use_red_ether                => $attribute_of{'use_red_ether'},
+            is_foil                      => $attribute_of{'is_foil'},
+            skill_disc                   => $attribute_of{'skill_disc'},
+            evo_atk                      => $attribute_of{'evo_atk'},
+            description                  => $attribute_of{'description'},
+
+        );
             %DATA_OF_CARD{$card_name} = $card_by_name;
         }
         # get self by default
         return self;
     }
-
 
     =para
     Shadowverse::Entity::Game::check_card()::
@@ -145,12 +128,12 @@ role Game_jobs {
 
     method check_card(Str:D $card_name) {
         if %DATA_OF_CARD{$card_name}.defined {
-                # info("The card with id: $card_id is found");
+                debug "The card with name: $card_name is found";
                 return %DATA_OF_CARD{$card_name};
         }
-        error("check_card() error:
-            card_name $card_name does not exist ");
-        return %DATA_OF_CARD{'SHADOWVERSE'};
+
+        error "card_name $card_name does not exist ";
+        return %BLANK_CARD;
     }
 
     =para
@@ -158,7 +141,7 @@ role Game_jobs {
     list two Player in normal sequence
 
     method players() {
-        return ($!first_player, $!second_player);
+        return ($!current_player, $!current_player.opponent_player);
     }
 
     =para
@@ -167,35 +150,30 @@ role Game_jobs {
 
     method roll_playing_sequence() {
         if ( True, False ).pick {
-            # info " Player 1 wins ";
+            debug " Player 1 wins ";
+            $!current_player = $!player1;
             return ($!player1,$!player2);
         }
         else {
-            info " Player 2 wins ";
+            debug " Player 2 wins ";
             $IS_PLAYER1_FIRST = False;
+            $!current_player = $!player2;
             return ($!player2,$!player1);
         }
     }
 }
 
-=para
-Shadowverse::Entity::Game::Cheat_jobs::
-Give privileges to do something
-
-role Cheat_jobs {
-
-}
 
 =para
 Shadowverse::Entity::Game::
 A Game object is all a user needs.
 
-class Game is Entity does Game_jobs does Cheat_jobs {
+class Game is Entity does Game_jobs {
     method BUILDALL(|) {
         callsame;
         @PODS.append: $=pod;
-        # Reset to 1 when game start
-        $.id = $ENTITY_COUNT = 1;
+        # Entity/Player ID reset to 0/1/2 when Game start
+        $.id = $ENTITY_COUNT = 0;
         self;
     }
 }
