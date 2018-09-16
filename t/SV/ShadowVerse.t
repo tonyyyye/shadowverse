@@ -28,7 +28,7 @@ sub case($text) {
     $tc_index++;
     $blank_count = 4 - $tc_index.log10.Int;
     $blank_content = " " x $blank_count;
-    colored("$blank_content ALL_TC_$game_index          |$text",
+    colored("$blank_content ALL_TC_$game_index |$text",
         'bold black on_white');
 }
 
