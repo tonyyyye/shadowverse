@@ -44,6 +44,7 @@ role Card_jobs {
     has $.evo_atk is rw;
     has $.description is rw;
 
+    ## inherit from its parents
     has Int $.type is default(%TYPE_OF{'CARD'});
     ## user defined
     # parent Player, or the owner
@@ -57,6 +58,7 @@ role Card_jobs {
     has Bool $.is_selectable is default(True) is rw;
     has Bool $.can_attack is rw;
     has @.battlecry_targets is rw;
+    has Bool %.has_ability_to is rw;
 
     multi method new($card_name) {
         debug "Creating [$card_name]";

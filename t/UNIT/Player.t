@@ -7,7 +7,8 @@ use Player;
 use Card;
 use Hero;
 
-my ($card, $game, $player);
+my ($card, $player, $hero, $game, $expected_result);
+## basic tests
 use-ok 'Player',
     '  UNIT_Player_TC_001     |class Player ';
 
@@ -21,6 +22,7 @@ my $player_u002 = Player.new();
 is $player_u002.id, 2,
     '  UNIT_Player_TC_004     |Entity ID increases ';
 
+## advanced tests
 my @deck_u003 = [ Card.new(), Card.new() ];
 ok my $player_u003 = Player.new(
           deck => @deck_u003,
@@ -35,10 +37,9 @@ ok my $player_u004 = Player.new(
       ),
     '  UNIT_Player_TC_006     |create Player with Hero ';
 
-# TODO add load_all_cards() to init
-$game = Game.new.init.load_all_cards();
-my $deck_file_of_player1 =  'more_cards.deck';
-ok $game.player1.load_deck($deck_file_of_player1),
+## In real Game tests
+$game = Game.new.init();
+ok $game.player1.load_deck('more_cards.deck'),
     '  UNIT_Player_TC_007     |Player can init with deck ';
 
 $player = $game.player1;
@@ -49,14 +50,7 @@ ok $player.draw.play($game.player1.hand[0]).
            draw.play($game.player1.hand[0]),
     '  UNIT_Player_TC_009     |chain play ';
 $player.draw.draw.play($game.player1.hand[0]);
-# for $player.field {
-#     .id.say;
-#     .Player.hand.elems.say;
-# }
-# say 123;
-# for $game.player1.hand {
-#     .id.say;
-# }
+
 # TODO summon Card
 # FIXME card id
 

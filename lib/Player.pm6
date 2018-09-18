@@ -15,22 +15,23 @@ What a Player can do.
 role Player_jobs {
     ## Player attributes
     has $.Game is rw;
-    # TODO Game.init() makes opponent_player as Player
     has $.opponent_player is rw;
     has $.Hero is rw;
     has Int $.class is rw;
     has Int $.mana is rw;
     has Int $.max_mana is rw;
-    # notice: every time dech is changed,remember to shuffle_deck
-    has Card @.deck is rw;
-    has Card @.hand is rw;
-    has Card @.field is rw;
-    has Card @.graveyard is rw;
-    # TODO add 'rush' for evolve
     has Bool $.is_able_to_evolve is default(False) is rw;
     has Int $.evolve_chance is default(3);
     has Int $.evolve_countdown is default(3);
     has Bool %.activity_of_special_power is rw;
+    # notice: every time deck is changed, remember to shuffle_deck
+    has Card @.deck is rw;
+    has Card @.hand is rw;
+    # TODO add 'rush' when Player evolve a minion
+    has Card @.field is rw;
+    has Card @.graveyard is rw;
+
+
     has Int $.turn_count is rw;
     ## interfaces which are not open to user
     has Str $!deck_name;

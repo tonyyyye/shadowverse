@@ -12,7 +12,9 @@ Shadowverse::Entity::Hero::Hero_jobs::
 What a Hero can do.
 
 role Hero_jobs {
+    has $.Player is rw;
     has $.life is default($MAX_HERO_LIFE) is rw;
+    has Bool $.is_dead is rw;
 
     =para
     Shadowverse::Entity::Hero::attack()::

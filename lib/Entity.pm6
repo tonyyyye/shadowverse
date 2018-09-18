@@ -51,6 +51,7 @@ role Entity_jobs {
             $entity_key = $method.name() ~ '()';
             %entity_hash{$entity_key} = 'IS_A_METHOD';
         }
+        # self.^mro;
         return %entity_hash;
     }
 }

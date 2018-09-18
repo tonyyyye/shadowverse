@@ -5,6 +5,7 @@ use Enum;
 use Hero;
 use Card;
 
+## basic tests
 use-ok 'Hero',
     '  UNIT_Hero_TC_001       |class Hero ';
 
@@ -18,9 +19,9 @@ my $hero_u002 = Hero.new();
 is $hero_u002.id, 2,
     '  UNIT_Hero_TC_004       |Entity ID increases ';
 
+## advanced tests
 
-
-
+## In real Game tests
 
 
 

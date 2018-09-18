@@ -3,7 +3,7 @@ use lib <lib>;
 use Entity;
 use Enum;
 
-
+## basic tests
 use-ok 'Entity',
     '  UNIT_Entity_TC_001     |class Entity ';
 
@@ -17,6 +17,7 @@ my $entity_u002 = Entity.new();
 is $entity_u002.id, 2,
     '  UNIT_Entity_TC_004     |Entity ID increases ';
 
+## advanced tests
 my %expected_entity_u002 = (
     id           => 2,
     name         => 'SHADOWVERSE',
@@ -32,9 +33,9 @@ is $entity_u002.entity(),    %expected_entity_u002,
     '  UNIT_Entity_TC_005     |use entity() to show structure ';
 
 is $entity_u002.help('help()'), ' Show description of a method ' ~
-    ':parameters: The method/instance name that you want to know ' ~
-    ':return: A string form of the description .',
-    '  UNIT_Entity_TC_006     |use help()';
+       ':parameters: The method/instance name that you want to know ' ~
+       ':return: A string form of the description .',
+    '  UNIT_Entity_TC_006     |help method';
 
 is $entity_u002.help('Entity'), ' Everything is an Entity .',
     '  UNIT_Entity_TC_007     |use help(Class) ';
@@ -43,6 +44,7 @@ my $entity_u003 = Entity.new(
         :name<hero_test>,
         type => %TYPE_OF{'HERO'},
    );
+my @mro = (Entity, Any, Mu);
 my %expected_entity_u003 = (
     id           => 3,
     name         => 'hero_test',
